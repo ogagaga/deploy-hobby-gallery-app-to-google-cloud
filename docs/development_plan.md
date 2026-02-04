@@ -2,13 +2,13 @@
 
 ## 1. 開発フェーズとタスク
 
-### フェーズ1: 環境構築とベースの実装 [/]
+### フェーズ1: 環境構築とベースの実装 [x]
 - [x] 要件定義・開発計画の作成
-- [ ] Docker環境の構築 (Next.js, PostgreSQL)
-- [ ] Next.js (App Router) の初期セットアップ
-- [ ] Tailwind CSS + Shadcn UI の導入
+- [x] Docker環境の構築 (Next.js, PostgreSQL)
+- [x] Next.js (App Router) の初期セットアップ
+- [x] Tailwind CSS + Shadcn UI の導入
 
-### フェーズ2: 認証機能の実装 [ ]
+### フェーズ2: 認証機能の実装 [/]
 - [ ] NextAuth.js (Auth.js) のセットアップ
 - [ ] Google Provider の設定
 - [ ] 管理者メールアドレスによるアクセス制限ロジックの実装

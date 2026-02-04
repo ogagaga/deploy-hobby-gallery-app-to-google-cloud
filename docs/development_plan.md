@@ -8,12 +8,12 @@
 - [x] Next.js (App Router) の初期セットアップ
 - [x] Tailwind CSS + Shadcn UI の導入
 
-### フェーズ2: 認証機能の実装 [/]
-- [ ] NextAuth.js (Auth.js) のセットアップ
-- [ ] Google Provider の設定
-- [ ] 管理者メールアドレスによるアクセス制限ロジックの実装
+### フェーズ2: 認証機能の実装 [x]
+- [x] NextAuth.js (Auth.js) のセットアップ
+- [x] Google Provider の設定
+- [x] 管理者メールアドレスによるアクセス制限ロジックの実装
 
-### フェーズ3: 作品投稿機能の実装 [ ]
+### フェーズ3: 作品投稿機能の実装 [/]
 - [ ] データベーススキーマ設計 (Prisma/Drizzle等)
 - [ ] 写真アップロード機能 (Local Storage保存)
 - [ ] 投稿フォーム作成 (作品名、詳細、タグ等)

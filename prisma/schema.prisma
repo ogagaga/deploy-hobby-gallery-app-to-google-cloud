@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Work {
+  id            String   @id @default(cuid())
+  title         String   // 作品タイトル
+  kitName       String?  // キット名
+  maker         String?  // メーカー
+  scale         String?  // スケール
+  genre         String?  // ジャンル
+  startDate     DateTime? // 制作開始日
+  endDate       DateTime? // 制作完了日
+  paints        String?   // 使用塗料
+  description   String?   // 改造・ポイント（自由記述）
+  
+  mainImage     String    // メイン写真のパス/URL
+  images        Image[]   // サブ写真
+
+  tags          Tag[]     @relation("WorkTags")
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Image {
+  id      String @id @default(cuid())
+  url     String
+  workId  String
+  work    Work   @relation(fields: [workId], references: [id], onDelete: Cascade)
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  works Work[] @relation("WorkTags")
+}

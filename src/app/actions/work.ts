@@ -52,7 +52,7 @@ export async function createWork(formData: FormData) {
     const tagNames = tagsString ? tagsString.split(",").map(t => t.trim()).filter(Boolean) : []
 
     // データベースへの保存
-    const work = await prisma.work.create({
+    await prisma.work.create({
         data: {
             title,
             kitName,

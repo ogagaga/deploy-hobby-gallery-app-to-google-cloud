@@ -19,13 +19,14 @@ export function WorkForm() {
         try {
             await createWork(formData)
             // 成功時は actions 側で redirect("/") が呼ばれるため、ここには到達しない（Next.jsの仕様）
-        } catch (error: any) {
+        } catch (error) {
+            const err = error as Error
             // Next.js の redirect は内部的にエラーを投げるため、それを無視する
-            if (error.message === "NEXT_REDIRECT") {
+            if (err.message === "NEXT_REDIRECT") {
                 return
             }
             console.error(error)
-            alert("投稿に失敗しました。詳細: " + error.message)
+            alert("投稿に失敗しました。詳細: " + err.message)
         } finally {
             setIsPending(false)
         }

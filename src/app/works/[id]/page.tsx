@@ -4,8 +4,10 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ChevronLeft, Package, Ruler, Palette } from "lucide-react"
+import { ChevronLeft, Package, Ruler, Palette, Edit3 } from "lucide-react"
 import { Image as PrismaImage, Tag } from "@prisma/client"
+import { auth } from "@/auth"
+import { DeleteButton } from "@/components/works/delete-button"
 
 interface WorkDetailPageProps {
     params: Promise<{
@@ -14,6 +16,9 @@ interface WorkDetailPageProps {
 }
 
 export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
+    const session = await auth()
+    const isAdmin = session?.user?.email === process.env.ADMIN_EMAIL
+
     const { id } = await params
 
     const work = await prisma.work.findUnique({
@@ -30,12 +35,26 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
 
     return (
         <div className="max-w-5xl mx-auto py-8 px-4">
-            <Button asChild variant="ghost" className="mb-8 hover:bg-transparent p-0 flex items-center gap-2">
-                <Link href="/">
-                    <ChevronLeft className="w-4 h-4" />
-                    ギャラリー一覧に戻る
-                </Link>
-            </Button>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                <Button asChild variant="ghost" className="hover:bg-transparent p-0 flex items-center gap-2 w-fit">
+                    <Link href="/">
+                        <ChevronLeft className="w-4 h-4" />
+                        ギャラリー一覧に戻る
+                    </Link>
+                </Button>
+
+                {isAdmin && (
+                    <div className="flex items-center gap-3">
+                        <Button asChild variant="outline" className="rounded-full shadow-sm">
+                            <Link href={`/works/${work.id}/edit`}>
+                                <Edit3 className="w-4 h-4 mr-2" />
+                                編集
+                            </Link>
+                        </Button>
+                        <DeleteButton workId={work.id} workTitle={work.title} />
+                    </div>
+                )}
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 {/* 左カラム: 画像セクション */}

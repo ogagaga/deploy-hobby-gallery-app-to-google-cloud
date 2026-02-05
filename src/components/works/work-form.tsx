@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Loader2, Upload } from "lucide-react"
+import { toast } from "sonner"
 import Image from "next/image"
 
 interface WorkFormProps {
@@ -40,17 +41,21 @@ export function WorkForm({ initialData }: WorkFormProps) {
         const formData = new FormData(event.currentTarget)
         try {
             if (isEdit) {
-                await updateWork(initialData!.id, formData)
+                const result = await updateWork(initialData!.id, formData)
+                if (result.success) {
+                    toast.success("作品を更新しました")
+                    router.push(`/works/${result.id}`)
+                }
             } else {
-                await createWork(formData)
+                const result = await createWork(formData)
+                if (result.success) {
+                    toast.success("作品を投稿しました")
+                    router.push("/")
+                }
             }
-            // redirect happens in action
         } catch (error) {
-            const err = error as Error
-            if (err.message === "NEXT_REDIRECT") return
-
             console.error(error)
-            alert(`${isEdit ? "更新" : "投稿"}に失敗しました。詳細: ${err.message}`)
+            toast.error(`${isEdit ? "更新" : "投稿"}に失敗しました。`)
         } finally {
             setIsPending(false)
         }

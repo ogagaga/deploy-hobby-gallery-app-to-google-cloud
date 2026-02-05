@@ -15,6 +15,8 @@ import {
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog"
 import { Trash2, Loader2 } from "lucide-react"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 interface DeleteButtonProps {
     workId: string
@@ -22,21 +24,20 @@ interface DeleteButtonProps {
 }
 
 export function DeleteButton({ workId, workTitle }: DeleteButtonProps) {
+    const router = useRouter()
     const [isPending, setIsPending] = useState(false)
 
     const handleDelete = async () => {
         setIsPending(true)
         try {
-            await deleteWork(workId)
-            // Redirect handled in action
-        } catch (error) {
-            const err = error as Error
-            // Next.js の redirect は内部的にエラーを投げるため、それを無視する
-            if (err.message === "NEXT_REDIRECT") {
-                return
+            const result = await deleteWork(workId)
+            if (result.success) {
+                toast.success("作品を削除しました")
+                router.push("/")
             }
+        } catch (error) {
             console.error(error)
-            alert("削除に失敗しました: " + err.message)
+            toast.error("削除に失敗しました")
             setIsPending(false)
         }
     }

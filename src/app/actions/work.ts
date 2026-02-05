@@ -76,7 +76,7 @@ export async function createWork(formData: FormData) {
     })
 
     revalidatePath("/")
-    redirect("/")
+    return { success: true }
 }
 
 export async function updateWork(id: string, formData: FormData) {
@@ -147,7 +147,7 @@ export async function updateWork(id: string, formData: FormData) {
 
     revalidatePath("/")
     revalidatePath(`/works/${id}`)
-    redirect(`/works/${id}`)
+    return { success: true, id }
 }
 
 export async function deleteWork(id: string) {
@@ -180,5 +180,5 @@ export async function deleteWork(id: string) {
     })
 
     revalidatePath("/")
-    redirect("/")
+    return { success: true }
 }

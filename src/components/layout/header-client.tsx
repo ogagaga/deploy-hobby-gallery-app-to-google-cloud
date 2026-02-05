@@ -6,6 +6,7 @@ import { SignInButton, SignOutButton } from "@/components/auth/auth-buttons"
 import { Camera } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Session } from "next-auth"
+import { ThemeToggle } from "./theme-toggle"
 
 interface HeaderProps {
     session: Session | null
@@ -46,7 +47,8 @@ export function HeaderClient({ session }: HeaderProps) {
                         Hobby Gallery
                     </span>
                 </Link>
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-4">
+                    <ThemeToggle />
                     {session ? (
                         <div className="flex items-center gap-4">
                             <div className="hidden sm:flex flex-col items-end">

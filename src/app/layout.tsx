@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
+import { ScrollToTop } from "@/components/layout/scroll-to-top";
 
 export const metadata: Metadata = {
   title: "Hobby Gallery",
@@ -21,6 +22,7 @@ export default function RootLayout({
         <main className="container mx-auto px-4 py-8">
           {children}
         </main>
+        <ScrollToTop />
       </body>
     </html>
   );

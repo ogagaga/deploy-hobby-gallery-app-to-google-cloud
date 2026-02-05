@@ -28,7 +28,7 @@ export function WorkCard({ work }: WorkCardProps) {
             transition={{ duration: 0.4, ease: "easeOut" }}
         >
             <Link href={`/works/${work.id}`} className="block group">
-                <Card className="overflow-hidden border-none shadow-sm hover:shadow-xl transition-all duration-500 rounded-3xl bg-white dark:bg-zinc-900 ring-1 ring-inset ring-foreground/5 hover:ring-primary/20">
+                <Card className="overflow-hidden border-none shadow-sm premium-shadow-hover rounded-3xl bg-white dark:bg-zinc-900 ring-1 ring-inset ring-foreground/5 hover:ring-primary/20">
                     <CardHeader className="p-0">
                         <div className="relative aspect-[4/3] overflow-hidden">
                             <Image

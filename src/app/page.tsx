@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { WorkCard } from "@/components/works/work-card";
+import { WorkList } from "@/components/works/work-list";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Work, Tag } from "@prisma/client";
@@ -46,13 +47,7 @@ export default async function Home() {
             </MotionItem>
 
             {works.length > 0 ? (
-              <MotionContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-                {works.map((work: Work & { tags: Tag[] }) => (
-                  <MotionItem key={work.id}>
-                    <WorkCard work={work} />
-                  </MotionItem>
-                ))}
-              </MotionContainer>
+              <WorkList works={works} />
             ) : (
               <MotionItem className="border-2 border-dashed rounded-[3rem] p-24 flex flex-col items-center justify-center text-muted-foreground bg-muted/5 w-full">
                 <div className="w-20 h-20 rounded-full bg-muted/10 flex items-center justify-center mb-6 text-4xl text-foreground">🖼️</div>

@@ -122,5 +122,36 @@
 
   body {
     @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(at 0% 0%, oklch(0.95 0.02 240 / 0.3) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, oklch(0.95 0.02 300 / 0.3) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl border border-white/20 dark:border-zinc-800/20 shadow-xl;
+  }
+
+  .glass-dark {
+    @apply bg-zinc-900/80 backdrop-blur-2xl border border-zinc-800/50 shadow-2xl;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-br from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent;
+  }
+
+  .premium-shadow {
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.1);
+  }
+
+  .premium-shadow-hover {
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .premium-shadow-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.15);
   }
 }

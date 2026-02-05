@@ -8,6 +8,7 @@ import { ChevronLeft, Package, Ruler, Palette, Edit3 } from "lucide-react"
 import { Image as PrismaImage, Tag } from "@prisma/client"
 import { auth } from "@/auth"
 import { DeleteButton } from "@/components/works/delete-button"
+import { MotionContainer, MotionItem } from "@/components/animations/motion-wrapper"
 
 interface WorkDetailPageProps {
     params: Promise<{
@@ -34,18 +35,20 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
     }
 
     return (
-        <div className="max-w-5xl mx-auto py-8 px-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                <Button asChild variant="ghost" className="hover:bg-transparent p-0 flex items-center gap-2 w-fit">
+        <MotionContainer className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <MotionItem className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-12">
+                <Button asChild variant="ghost" className="hover:bg-accent/50 p-0 pr-4 flex items-center gap-2 w-fit rounded-full transition-all">
                     <Link href="/">
-                        <ChevronLeft className="w-4 h-4" />
-                        ギャラリー一覧に戻る
+                        <div className="w-8 h-8 rounded-full bg-background border flex items-center justify-center shadow-sm">
+                            <ChevronLeft className="w-4 h-4" />
+                        </div>
+                        <span className="font-bold text-sm">ギャラリー一覧に戻る</span>
                     </Link>
                 </Button>
 
                 {isAdmin && (
                     <div className="flex items-center gap-3">
-                        <Button asChild variant="outline" className="rounded-full shadow-sm">
+                        <Button asChild variant="outline" className="rounded-full shadow-sm hover:shadow-md transition-all px-6">
                             <Link href={`/works/${work.id}/edit`}>
                                 <Edit3 className="w-4 h-4 mr-2" />
                                 編集
@@ -54,88 +57,111 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
                         <DeleteButton workId={work.id} workTitle={work.title} />
                     </div>
                 )}
-            </div>
+            </MotionItem>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                {/* 左カラム: 画像セクション */}
-                <div className="space-y-6">
-                    <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-muted border shadow-sm">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                {/* 左カラム: 画像セクション (7/12) */}
+                <MotionItem className="lg:col-span-7 space-y-8">
+                    <div className="relative aspect-square w-full rounded-[2.5rem] overflow-hidden bg-white dark:bg-zinc-900 border shadow-2xl shadow-zinc-200/50 dark:shadow-none ring-1 ring-zinc-200/50 dark:ring-zinc-800">
                         <Image
                             src={work.mainImage}
                             alt={work.title}
                             fill
-                            className="object-contain"
+                            className="object-contain p-4"
                             priority
                         />
                     </div>
 
                     {work.images.length > 0 && (
-                        <div className="grid grid-cols-4 gap-4">
+                        <div className="grid grid-cols-4 gap-6">
                             {work.images.map((img: PrismaImage) => (
-                                <div key={img.id} className="relative aspect-square rounded-lg overflow-hidden border bg-muted group cursor-pointer">
+                                <MotionItem key={img.id} className="relative aspect-square rounded-3xl overflow-hidden border bg-white dark:bg-zinc-900 ring-1 ring-zinc-200/50 dark:ring-zinc-800 group cursor-pointer shadow-sm hover:shadow-md transition-all">
                                     <Image
                                         src={img.url}
                                         alt="サブ画像"
                                         fill
-                                        className="object-cover group-hover:opacity-80 transition-opacity"
+                                        className="object-cover group-hover:scale-110 transition-transform duration-500"
                                     />
-                                </div>
+                                    <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </MotionItem>
                             ))}
                         </div>
                     )}
-                </div>
+                </MotionItem>
 
-                {/* 右カラム: 詳細情報セクション */}
-                <div className="space-y-8">
-                    <div>
-                        <h1 className="text-4xl font-black tracking-tight mb-2">{work.title}</h1>
-                        <div className="flex flex-wrap gap-2 mb-6">
-                            {work.genre && <Badge variant="secondary">{work.genre}</Badge>}
+                {/* 右カラム: 詳細情報セクション (5/12) */}
+                <div className="lg:col-span-5 space-y-12">
+                    <MotionItem className="space-y-6">
+                        <div className="space-y-2">
+                            <h1 className="text-5xl font-black tracking-tight text-foreground leading-[1.1] tracking-tighter">
+                                {work.title}
+                            </h1>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {work.genre && (
+                                <Badge className="rounded-full bg-primary/10 text-primary hover:bg-primary/20 border-none px-4 py-1 text-xs font-bold uppercase tracking-wider">
+                                    {work.genre}
+                                </Badge>
+                            )}
                             {work.tags.map((tag: Tag) => (
-                                <Badge key={tag.id} variant="outline">#{tag.name}</Badge>
+                                <Badge key={tag.id} variant="outline" className="rounded-full px-4 py-1 text-xs font-medium border-zinc-200 dark:border-zinc-800 text-muted-foreground">
+                                    #{tag.name}
+                                </Badge>
                             ))}
                         </div>
-                    </div>
+                    </MotionItem>
 
-                    <div className="grid grid-cols-1 gap-4 text-sm">
-                        <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/30 border">
-                            <Package className="w-5 h-5 text-blue-500 mt-0.5" />
+                    <MotionItem className="grid grid-cols-1 gap-4">
+                        <div className="flex items-center gap-5 p-6 rounded-[2rem] bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800">
+                            <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                                <Package className="w-6 h-6" />
+                            </div>
                             <div>
-                                <p className="font-bold text-muted-foreground uppercase text-[10px] tracking-wider mb-1">キット情報</p>
-                                <p className="text-base">{work.kitName || "---"} {work.maker && <span className="text-muted-foreground">({work.maker})</span>}</p>
+                                <p className="font-black text-muted-foreground uppercase text-[10px] tracking-widest mb-1 opacity-60">KIT INFO</p>
+                                <p className="text-lg font-bold">
+                                    {work.kitName || "---"}
+                                    {work.maker && <span className="ml-2 text-muted-foreground font-medium text-base">({work.maker})</span>}
+                                </p>
                             </div>
                         </div>
 
-                        <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/30 border">
-                            <Ruler className="w-5 h-5 text-cyan-500 mt-0.5" />
+                        <div className="flex items-center gap-5 p-6 rounded-[2rem] bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800">
+                            <div className="w-12 h-12 rounded-2xl bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center text-cyan-600 dark:text-cyan-400">
+                                <Ruler className="w-6 h-6" />
+                            </div>
                             <div>
-                                <p className="font-bold text-muted-foreground uppercase text-[10px] tracking-wider mb-1">スケール</p>
-                                <p className="text-base">{work.scale || "---"}</p>
+                                <p className="font-black text-muted-foreground uppercase text-[10px] tracking-widest mb-1 opacity-60">SCALE</p>
+                                <p className="text-lg font-bold">{work.scale || "---"}</p>
                             </div>
                         </div>
 
                         {work.paints && (
-                            <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/30 border">
-                                <Palette className="w-5 h-5 text-pink-500 mt-0.5" />
-                                <div>
-                                    <p className="font-bold text-muted-foreground uppercase text-[10px] tracking-wider mb-1">使用塗料</p>
-                                    <p className="text-base whitespace-pre-wrap">{work.paints}</p>
+                            <div className="flex items-start gap-5 p-6 rounded-[2rem] bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800">
+                                <div className="w-12 h-12 rounded-2xl bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center text-pink-600 dark:text-pink-400 shrink-0">
+                                    <Palette className="w-6 h-6" />
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="font-black text-muted-foreground uppercase text-[10px] tracking-widest mb-1 opacity-60">PAINTS</p>
+                                    <p className="text-base font-medium whitespace-pre-wrap leading-relaxed">{work.paints}</p>
                                 </div>
                             </div>
                         )}
-                    </div>
+                    </MotionItem>
 
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-bold flex items-center gap-2 border-b pb-2">
-                            <span className="w-1.5 h-6 bg-primary rounded-full" />
-                            説明・ポイント
-                        </h3>
-                        <p className="text-lg leading-relaxed whitespace-pre-wrap text-muted-foreground">
-                            {work.description || "説明はありません。"}
-                        </p>
-                    </div>
+                    <MotionItem className="space-y-6">
+                        <div className="flex items-center gap-3">
+                            <div className="w-1.5 h-8 bg-primary rounded-full shadow-[0_0_15px_rgba(var(--primary),0.5)]" />
+                            <h3 className="text-2xl font-black tracking-tight tracking-tighter">DESIGN NOTES</h3>
+                        </div>
+                        <div className="relative">
+                            <div className="absolute -left-4 top-0 bottom-0 w-px bg-zinc-100 dark:bg-zinc-800" />
+                            <p className="text-xl leading-relaxed whitespace-pre-wrap text-muted-foreground font-medium">
+                                {work.description || "説明はありません。"}
+                            </p>
+                        </div>
+                    </MotionItem>
                 </div>
             </div>
-        </div>
+        </MotionContainer>
     )
 }

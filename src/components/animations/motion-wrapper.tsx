@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, Variants } from "framer-motion"
+import { motion, Variants, AnimatePresence } from "framer-motion"
 import { ReactNode } from "react"
 
 interface MotionContainerProps {
@@ -39,14 +39,23 @@ export function MotionContainer({ children, className }: MotionContainerProps) {
             animate="show"
             className={className}
         >
-            {children}
+            <AnimatePresence mode="popLayout">
+                {children}
+            </AnimatePresence>
         </motion.div>
     )
 }
 
 export function MotionItem({ children, className }: { children: ReactNode, className?: string }) {
     return (
-        <motion.div variants={itemVariants} className={className}>
+        <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="show"
+            exit="hidden"
+            layout
+            className={className}
+        >
             {children}
         </motion.div>
     )

@@ -5,8 +5,55 @@ import { join } from "path"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
 import { Prisma } from "@prisma/client"
+import { Storage } from "@google-cloud/storage"
+
+const storage = new Storage()
+const bucketName = process.env.GCS_BUCKET_NAME
+
+async function saveImage(file: File, prefix: string): Promise<string> {
+    const fileName = `${Date.now()}-${prefix}-${file.name}`
+    const buffer = Buffer.from(await file.arrayBuffer())
+
+    if (bucketName) {
+        // Cloud Storage に保存
+        const bucket = storage.bucket(bucketName)
+        const gcsFile = bucket.file(`uploads/${fileName}`)
+        await gcsFile.save(buffer, {
+            contentType: file.type,
+        })
+        // 公開URLを返す
+        return `https://storage.googleapis.com/${bucketName}/uploads/${fileName}`
+    } else {
+        // ローカルに保存
+        const uploadDir = join(process.cwd(), "public", "uploads")
+        await mkdir(uploadDir, { recursive: true })
+        const filePath = join(uploadDir, fileName)
+        await writeFile(filePath, buffer)
+        return `/uploads/${fileName}`
+    }
+}
+
+async function deleteImage(url: string) {
+    if (bucketName && url.startsWith("https://storage.googleapis.com")) {
+        // Cloud Storage から削除
+        const bucket = storage.bucket(bucketName)
+        const fileName = url.split(`${bucketName}/`)[1]
+        try {
+            await bucket.file(fileName).delete()
+        } catch (e) {
+            console.error(`Failed to delete GCS file: ${fileName}`, e)
+        }
+    } else if (url.startsWith("/uploads/")) {
+        // ローカルから削除
+        const filePath = join(process.cwd(), "public", url)
+        try {
+            await unlink(filePath)
+        } catch (e) {
+            console.error(`Failed to delete local file: ${filePath}`, e)
+        }
+    }
+}
 
 export async function createWork(formData: FormData) {
     const session = await auth()
@@ -26,27 +73,16 @@ export async function createWork(formData: FormData) {
     const mainImageFile = formData.get("mainImage") as File
     const subImageFiles = formData.getAll("subImages") as File[]
 
-    // 画像保存用ディレクトリの確保
-    const uploadDir = join(process.cwd(), "public", "uploads")
-    await mkdir(uploadDir, { recursive: true })
-
     // メイン画像の保存
-    const mainImageName = `${Date.now()}-main-${mainImageFile.name}`
-    const mainImagePath = join(uploadDir, mainImageName)
-    const mainImageBuffer = Buffer.from(await mainImageFile.arrayBuffer())
-    await writeFile(mainImagePath, mainImageBuffer)
-    const mainImageUrl = `/uploads/${mainImageName}`
+    const mainImageUrl = await saveImage(mainImageFile, "main")
 
     // サブ画像の保存
     const subImageUrls: string[] = []
     for (let i = 0; i < subImageFiles.length; i++) {
         const file = subImageFiles[i]
         if (file.size === 0) continue
-        const name = `${Date.now()}-sub-${i}-${file.name}`
-        const path = join(uploadDir, name)
-        const buffer = Buffer.from(await file.arrayBuffer())
-        await writeFile(path, buffer)
-        subImageUrls.push(`/uploads/${name}`)
+        const url = await saveImage(file, `sub-${i}`)
+        subImageUrls.push(url)
     }
 
     // タグの処理
@@ -107,16 +143,9 @@ export async function updateWork(id: string, formData: FormData) {
 
     // メイン画像の更新がある場合
     if (mainImageFile && mainImageFile.size > 0) {
-        const uploadDir = join(process.cwd(), "public", "uploads")
-        const mainImageName = `${Date.now()}-main-${mainImageFile.name}`
-        const mainImagePath = join(uploadDir, mainImageName)
-        const mainImageBuffer = Buffer.from(await mainImageFile.arrayBuffer())
-        await writeFile(mainImagePath, mainImageBuffer)
-        mainImageUrl = `/uploads/${mainImageName}`
-
+        mainImageUrl = await saveImage(mainImageFile, "main")
         // 古いファイルを削除
-        const oldPath = join(process.cwd(), "public", existingWork.mainImage)
-        try { await unlink(oldPath) } catch (e) { console.error("Failed to delete old image", e) }
+        await deleteImage(existingWork.mainImage)
     }
 
     const tagNames = tagsString ? tagsString.split(",").map(t => t.trim()).filter(Boolean) : []
@@ -166,12 +195,7 @@ export async function deleteWork(id: string) {
     // ファイルの削除
     const filesToDelete = [work.mainImage, ...work.images.map((img: { url: string }) => img.url)]
     for (const fileUrl of filesToDelete) {
-        const filePath = join(process.cwd(), "public", fileUrl)
-        try {
-            await unlink(filePath)
-        } catch (e) {
-            console.error(`Failed to delete file: ${filePath}`, e)
-        }
+        await deleteImage(fileUrl)
     }
 
     // データベースからの削除

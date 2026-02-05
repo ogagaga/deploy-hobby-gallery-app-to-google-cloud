@@ -1,0 +1,56 @@
+# Stage 1: Install dependencies
+FROM node:20-slim AS deps
+RUN apt-get update && apt-get install -y openssl ca-certificates
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Stage 2: Build the application
+FROM node:20-slim AS builder
+RUN apt-get update && apt-get install -y openssl ca-certificates
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Prisma のクライアント生成
+RUN NODE_TLS_REJECT_UNAUTHORIZED=0 npx prisma generate
+
+# Next.js のビルド (本番用)
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN npm run build
+
+# Stage 3: Production runner
+FROM node:20-slim AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# Install openssl for Prisma runtime
+RUN apt-get update && apt-get install -y openssl ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN groupadd --system --gid 1001 nodejs
+RUN useradd --system --uid 1001 -m nextjs
+
+# ビルド成果物のコピー
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# 全ての依存関係（prisma CLI等を含む）をコピー
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+# Prisma 関連（スキーマ、マイグレーション）をコピー
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+
+# 権限の調整
+RUN chown -R nextjs:nodejs /app
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["node", "server.js"]

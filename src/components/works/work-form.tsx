@@ -29,6 +29,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
     const router = useRouter()
     const [isPending, setIsPending] = useState(false)
     const [mainImagePreview, setMainImagePreview] = useState<string | null>(initialData?.mainImage || null)
+    const [subImagesPreviews, setSubImagesPreviews] = useState<string[]>([])
 
     const isEdit = !!initialData
 
@@ -63,6 +64,25 @@ export function WorkForm({ initialData }: WorkFormProps) {
                 setMainImagePreview(reader.result as string)
             }
             reader.readAsDataURL(file)
+        }
+    }
+
+    const handleSubImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files
+        if (files) {
+            const fileList = Array.from(files)
+            const newPreviews: string[] = []
+
+            fileList.forEach(file => {
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                    newPreviews.push(reader.result as string)
+                    if (newPreviews.length === fileList.length) {
+                        setSubImagesPreviews(prev => [...prev, ...newPreviews])
+                    }
+                }
+                reader.readAsDataURL(file)
+            })
         }
     }
 
@@ -110,9 +130,34 @@ export function WorkForm({ initialData }: WorkFormProps) {
                     </div>
 
                     {!isEdit && (
-                        <div className="space-y-2">
+                        <div className="space-y-4">
                             <Label htmlFor="subImages" className="text-lg font-bold">サブ写真（複数選択可）</Label>
-                            <Input id="subImages" name="subImages" type="file" accept="image/*" multiple className="cursor-pointer bg-muted/30 border-none h-auto py-4 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90" />
+                            <Input
+                                id="subImages"
+                                name="subImages"
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                className="cursor-pointer bg-muted/30 border-none h-auto py-4 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                                onChange={handleSubImagesChange}
+                            />
+
+                            {subImagesPreviews.length > 0 && (
+                                <div className="grid grid-cols-4 gap-3 mt-4">
+                                    {subImagesPreviews.map((preview, idx) => (
+                                        <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border shadow-sm group">
+                                            <Image src={preview} alt="Sub preview" fill className="object-cover" />
+                                            <button
+                                                type="button"
+                                                className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-bold"
+                                                onClick={() => setSubImagesPreviews(prev => prev.filter((_, i) => i !== idx))}
+                                            >
+                                                削除
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                             <p className="text-xs text-muted-foreground">完成後の各アングルや、制作工程などを追加できます。</p>
                         </div>
                     )}

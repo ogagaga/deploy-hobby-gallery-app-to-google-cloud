@@ -1,0 +1,44 @@
+steps:
+  # 1. ビルド
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'asia-northeast1-docker.pkg.dev/dev-personal-yutaka-ogasawara/hobby-gallery/web:latest',
+      '-f', 'Dockerfile.prod',
+      '.'
+    ]
+
+  # 2. プッシュ
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia-northeast1-docker.pkg.dev/dev-personal-yutaka-ogasawara/hobby-gallery/web:latest']
+
+  # 3. Cloud Run デプロイ
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'hobby-gallery'
+      - '--image'
+      - 'asia-northeast1-docker.pkg.dev/dev-personal-yutaka-ogasawara/hobby-gallery/web:latest'
+      - '--region'
+      - 'asia-northeast1'
+      - '--quiet'
+
+  # 4. マイグレーション実行 (自動化)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'jobs'
+      - 'execute'
+      - 'migration-job'
+      - '--region'
+      - 'asia-northeast1'
+      - '--wait'
+      - '--quiet'
+
+images:
+  - 'asia-northeast1-docker.pkg.dev/dev-personal-yutaka-ogasawara/hobby-gallery/web:latest'
+
+timeout: '1200s'

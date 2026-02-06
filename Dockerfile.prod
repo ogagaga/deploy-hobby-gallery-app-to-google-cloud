@@ -14,7 +14,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Prisma のクライアント生成
-RUN NODE_TLS_REJECT_UNAUTHORIZED=0 npx prisma generate
+# Prisma のクライアント生成
+RUN npx prisma@6.19.2 generate
 
 # Next.js のビルド (本番用)
 ENV NEXT_TELEMETRY_DISABLED 1

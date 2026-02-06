@@ -11,14 +11,14 @@ resource "google_cloud_run_v2_service" "app" {
 
       env {
         name  = "NEXTAUTH_URL"
-        value = "https://hobby-gallery-z5ib2rxzwq-an.a.run.app"
+        value = "https://hobby-gallery-586566698809.asia-northeast1.run.app"
       }
 
       env {
         name = "DATABASE_URL"
         value_source {
           secret_key_ref {
-            secret  = google_secret_manager_secret.database_url.secret_id
+            secret  = google_secret_manager_secret.database_url.id
             version = "latest"
           }
         }
@@ -28,7 +28,7 @@ resource "google_cloud_run_v2_service" "app" {
         name = "NEXTAUTH_SECRET"
         value_source {
           secret_key_ref {
-            secret  = google_secret_manager_secret.nextauth_secret.secret_id
+            secret  = google_secret_manager_secret.nextauth_secret.id
             version = "latest"
           }
         }
@@ -43,7 +43,7 @@ resource "google_cloud_run_v2_service" "app" {
         name = "AUTH_GOOGLE_ID"
         value_source {
           secret_key_ref {
-            secret  = google_secret_manager_secret.auth_google_id.secret_id
+            secret  = google_secret_manager_secret.auth_google_id.id
             version = "latest"
           }
         }
@@ -53,7 +53,7 @@ resource "google_cloud_run_v2_service" "app" {
         name = "AUTH_GOOGLE_SECRET"
         value_source {
           secret_key_ref {
-            secret  = google_secret_manager_secret.auth_google_secret.secret_id
+            secret  = google_secret_manager_secret.auth_google_secret.id
             version = "latest"
           }
         }
@@ -63,7 +63,7 @@ resource "google_cloud_run_v2_service" "app" {
         name = "ADMIN_EMAIL"
         value_source {
           secret_key_ref {
-            secret  = google_secret_manager_secret.admin_email.secret_id
+            secret  = google_secret_manager_secret.admin_email.id
             version = "latest"
           }
         }
@@ -83,6 +83,11 @@ resource "google_cloud_run_v2_service" "app" {
           cpu    = "1"
           memory = "1024Mi"
         }
+      }
+
+      volume_mounts {
+        name       = "cloudsql"
+        mount_path = "/cloudsql"
       }
     }
 

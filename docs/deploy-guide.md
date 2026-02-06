@@ -5,7 +5,7 @@
 ## 1. 前提条件
 
 - Google Cloud SDK (`gcloud`) がインストールされ、認証が完了していること。
-- 対象プロジェクト (`dev-personal-yutaka-ogasawara`) への適切なアクセス権限があること。
+- 対象プロジェクトへの適切なアクセス権限があること。
 
 ## 2. デプロイフロー (自動化)
 
@@ -39,10 +39,36 @@ gcloud run jobs execute migration-job --region asia-northeast1 --wait
 
 これらを更新した場合は、Cloud Run Service の再デプロイまたはジョブ設定の更新が必要になります。
 
-## 5. トラブルシューティング
+## 6. リソースの停止と削除 (コスト削減・不要時)
 
-- **500 エラーが発生する場合**:
-  - `gcloud run services logs tail hobby-gallery` でログを確認してください。
-  - データベース接続エラー（P1001/P1013）の場合は、シークレットのフォーマット（`host=/cloudsql/...`）が正しいか確認してください。
-- **ビルドエラー**:
-  - Prisma のバージョンが `package.json` で `6.19.2` に固定されていることを確認してください。
+コストを抑えるため、あるいはプロジェクトを終了する際にリソースを停止・削除する方法です。
+
+### Cloud Run (サービス) の停止
+Cloud Run はリクエストがない限り料金が発生しない（CPUを常時割り当てていない場合）ため、明示的な「停止」はありませんが、公開を止めたい場合は以下のいずれかを行います。
+
+- **トラフィックを 0% にする**: 既存のリビジョンへのトラフィックを停止します。
+- **サービスの削除**:
+  ```bash
+  gcloud run services delete hobby-gallery --region asia-northeast1
+  ```
+
+### Cloud SQL (データベース) の停止
+Cloud SQL は実行中（起動中）に料金が発生します。一時的に止めたい場合は以下のコマンドを使用します。
+
+- **停止**:
+  ```bash
+  gcloud sql instances patch hobby-gallery-db --activation-policy NEVER
+  ```
+- **起動 (再開)**:
+  ```bash
+  gcloud sql instances patch hobby-gallery-db --activation-policy ALWAYS
+  ```
+- **削除**:
+  ```bash
+  gcloud sql instances delete hobby-gallery-db
+  ```
+
+### Cloud Run Job の削除
+```bash
+gcloud run jobs delete migration-job --region asia-northeast1
+```

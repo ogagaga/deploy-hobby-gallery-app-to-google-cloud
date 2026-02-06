@@ -47,6 +47,11 @@ export function HeaderClient({ session }: HeaderProps) {
                         Hobby Gallery
                     </span>
                 </Link>
+                <div className="hidden md:flex ml-8 border-l pl-8 gap-6 text-sm font-bold text-muted-foreground/60">
+                    <Link href="/welcome" className="hover:text-primary transition-colors">
+                        ABOUT
+                    </Link>
+                </div>
                 <div className="flex items-center gap-4">
                     <ThemeToggle />
                     {session ? (

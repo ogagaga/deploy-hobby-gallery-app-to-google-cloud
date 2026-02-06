@@ -26,30 +26,21 @@ export default async function Home() {
     <div className="flex flex-col items-center justify-center space-y-12 py-10">
       <WelcomePopup userName={session?.user?.name} />
 
-      {/* ヒーローセクション (未ログイン時) / ウェルカムセクション (ログイン時) */}
-      {!session ? (
-        <MotionContainer className="max-w-4xl space-y-12 py-10 border-b pb-20">
-          <MotionItem className="space-y-6 text-center">
-            <h1 className="text-5xl font-black tracking-tight lg:text-7xl text-foreground tracking-tighter leading-[0.9]">
-              プラモデル完成品を<br />
-              <span className="bg-gradient-to-r from-blue-600 via-violet-500 to-cyan-500 bg-clip-text text-transparent">
-                美しく、体系的に。
-              </span>
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
-              Hobby Galleryは、あなたのプラモデル制作の記録を写真と共に美しく保存・管理するための、デジタル展示室です。
-            </p>
-          </MotionItem>
-        </MotionContainer>
-      ) : null}
-
       {/* 作品コレクション一覧 (共通) */}
       <div className="w-full">
         <MotionItem className="flex items-center justify-between mb-10 border-b pb-8">
           <div className="space-y-1">
-            <h1 className="text-4xl font-black tracking-tight tracking-tighter">
-              作品コレクション
-            </h1>
+            <div className="flex items-center gap-4">
+              <h1 className="text-4xl font-black tracking-tight tracking-tighter">
+                作品コレクション
+              </h1>
+              <Link
+                href="/welcome"
+                className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors border px-3 py-1 rounded-full bg-muted/30"
+              >
+                サイトについて
+              </Link>
+            </div>
             <p className="text-muted-foreground font-medium text-sm">
               全 {works.length} 点の完成品が展示されています
             </p>

@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hobby Gallery
 
-## Getting Started
+プラモデルや模型の完成品写真を管理・展示するためのモダンなギャラリーアプリケーションです。
 
-First, run the development server:
+## 🚀 プロジェクト概要
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+このアプリケーションは、モデラーが自身の作品を詳細な制作データ（キット名、使用塗料、制作期間など）と共に美しく展示できるように設計されています。Next.js と Prisma を基盤とし、Google Cloud 上で安定して動作します。
 
+## 🛠 技術スタック
+
+- **Frontend**: [Next.js](https://nextjs.org/) (App Router, Turbopack)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/)
+- **Database**: [PostgreSQL](https://www.postgresql.org/)
+- **ORM**: [Prisma](https://www.prisma.io/) (v6.19.2)
+- **Authentication**: [Auth.js (NextAuth.js)](https://authjs.dev/)
+- **Infrastructure**: [Google Cloud Run](https://cloud.google.com/run), [Cloud SQL](https://cloud.google.com/sql)
+- **CI/CD**: [Google Cloud Build](https://cloud.google.com/build)
+
+## 📖 ドキュメント
+
+開発や運用に役立つ詳細なドキュメントは `docs/` ディレクトリに格納されています。
+
+- **[ローカル開発手順書](./docs/local-development.md)**: Mac でのセットアップと起動方法。
+- **[デプロイ手順書](./docs/deploy-guide.md)**: Google Cloud へのデプロイ・自動化・リソース管理について。
+- **[機能仕様書](./docs/functional-spec.md)**: アプリケーションの画面遷移やデータモデルの仕様。
+
+## 🚦 クイックスタート (ローカル)
+
+詳細は [ローカル開発手順書](./docs/local-development.md) を参照してください。
+
+1.  依存関係のインストール: `npm install`
+2.  DB起動: `docker compose up -d db`
+3.  DBマイグレーション: `npx prisma migrate dev`
+4.  開発サーバー起動: `npm run dev`
+
+---
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

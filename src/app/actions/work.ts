@@ -131,6 +131,9 @@ export async function updateWork(id: string, formData: FormData) {
     const tagsString = formData.get("tags") as string
     const mainImageFile = formData.get("mainImage") as File | null
 
+    const deleteImageUrls = formData.getAll("deleteImageUrls") as string[]
+    const subImageFiles = formData.getAll("subImages") as File[]
+
     // 既存データの取得
     const existingWork = await prisma.work.findUnique({
         where: { id },
@@ -150,7 +153,7 @@ export async function updateWork(id: string, formData: FormData) {
 
     const tagNames = tagsString ? tagsString.split(",").map(t => t.trim()).filter(Boolean) : []
 
-    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+    await prisma.$transaction(async (tx: any) => {
         // 作品情報の更新
         await tx.work.update({
             where: { id },
@@ -172,6 +175,33 @@ export async function updateWork(id: string, formData: FormData) {
                 }
             }
         })
+
+        // 指定された画像の削除
+        if (deleteImageUrls.length > 0) {
+            await tx.image.deleteMany({
+                where: {
+                    url: { in: deleteImageUrls },
+                    workId: id
+                }
+            })
+            // ストレージからも削除
+            for (const url of deleteImageUrls) {
+                await deleteImage(url)
+            }
+        }
+
+        // 新規サブ写真の保存
+        for (const file of subImageFiles) {
+            if (file.size > 0) {
+                const url = await saveImage(file, "sub")
+                await tx.image.create({
+                    data: {
+                        url,
+                        workId: id
+                    }
+                })
+            }
+        }
     })
 
     revalidatePath("/")

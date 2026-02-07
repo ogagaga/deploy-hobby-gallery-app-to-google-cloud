@@ -24,6 +24,7 @@ interface WorkFormProps {
         description: string | null
         mainImage: string
         tags: { name: string }[]
+        images: { id: string, url: string }[]
     }
 }
 
@@ -32,6 +33,9 @@ export function WorkForm({ initialData }: WorkFormProps) {
     const [isPending, setIsPending] = useState(false)
     const [mainImagePreview, setMainImagePreview] = useState<string | null>(initialData?.mainImage || null)
     const [subImagesPreviews, setSubImagesPreviews] = useState<string[]>([])
+    const [subImageFiles, setSubImageFiles] = useState<File[]>([])
+    const [existingSubImages, setExistingSubImages] = useState(initialData?.images || [])
+    const [deleteImageUrls, setDeleteImageUrls] = useState<string[]>([])
 
     const isEdit = !!initialData
 
@@ -40,6 +44,14 @@ export function WorkForm({ initialData }: WorkFormProps) {
         setIsPending(true)
 
         const formData = new FormData(event.currentTarget)
+
+        // サブ写真をクリア（標準のinputからの取得を無効化し、ステートから追加するため）
+        formData.delete("subImages")
+        subImageFiles.forEach(file => formData.append("subImages", file))
+
+        // 削除対象のURLを追加
+        deleteImageUrls.forEach(url => formData.append("deleteImageUrls", url))
+
         try {
             if (isEdit) {
                 const result = await updateWork(initialData!.id, formData)
@@ -77,19 +89,24 @@ export function WorkForm({ initialData }: WorkFormProps) {
         const files = e.target.files
         if (files) {
             const fileList = Array.from(files)
-            const newPreviews: string[] = []
+            setSubImageFiles(prev => [...prev, ...fileList])
 
             fileList.forEach(file => {
                 const reader = new FileReader()
                 reader.onloadend = () => {
-                    newPreviews.push(reader.result as string)
-                    if (newPreviews.length === fileList.length) {
-                        setSubImagesPreviews(prev => [...prev, ...newPreviews])
-                    }
+                    setSubImagesPreviews(prev => [...prev, reader.result as string])
                 }
                 reader.readAsDataURL(file)
             })
+
+            // 次回選択時に同じファイルを選べるようにクリア
+            e.target.value = ""
         }
+    }
+
+    const removeNewSubImage = (index: number) => {
+        setSubImageFiles(prev => prev.filter((_, i) => i !== index))
+        setSubImagesPreviews(prev => prev.filter((_, i) => i !== index))
     }
 
     return (
@@ -135,38 +152,58 @@ export function WorkForm({ initialData }: WorkFormProps) {
                         />
                     </div>
 
-                    {!isEdit && (
-                        <div className="space-y-4">
-                            <Label htmlFor="subImages" className="text-lg font-bold">サブ写真（複数選択可）</Label>
-                            <Input
-                                id="subImages"
-                                name="subImages"
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                className="cursor-pointer bg-muted/30 border-none h-auto py-4 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
-                                onChange={handleSubImagesChange}
-                            />
+                    <div className="space-y-4">
+                        <Label htmlFor="subImages" className="text-lg font-bold">サブ写真</Label>
 
-                            {subImagesPreviews.length > 0 && (
-                                <div className="grid grid-cols-4 gap-3 mt-4">
-                                    {subImagesPreviews.map((preview, idx) => (
-                                        <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border shadow-sm group">
-                                            <Image src={preview} alt="Sub preview" fill className="object-cover" />
-                                            <button
-                                                type="button"
-                                                className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-bold"
-                                                onClick={() => setSubImagesPreviews(prev => prev.filter((_, i) => i !== idx))}
-                                            >
-                                                削除
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                            <p className="text-xs text-muted-foreground">完成後の各アングルや、制作工程などを追加できます。</p>
-                        </div>
-                    )}
+                        {/* 既存のサブ写真 (編集時) */}
+                        {existingSubImages.length > 0 && (
+                            <div className="grid grid-cols-4 gap-3 mb-4">
+                                {existingSubImages.map((img) => (
+                                    <div key={img.id} className="relative aspect-square rounded-xl overflow-hidden border shadow-sm group">
+                                        <Image src={img.url} alt="Sub image" fill className="object-cover" />
+                                        <button
+                                            type="button"
+                                            className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-bold"
+                                            onClick={() => {
+                                                setDeleteImageUrls(prev => [...prev, img.url])
+                                                setExistingSubImages(prev => prev.filter(i => i.id !== img.id))
+                                            }}
+                                        >
+                                            削除
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        <Input
+                            id="subImages"
+                            name="subImages"
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            className="cursor-pointer bg-muted/30 border-none h-auto py-4 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                            onChange={handleSubImagesChange}
+                        />
+
+                        {subImagesPreviews.length > 0 && (
+                            <div className="grid grid-cols-4 gap-3 mt-4">
+                                {subImagesPreviews.map((preview, idx) => (
+                                    <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border shadow-sm group">
+                                        <Image src={preview} alt="Sub preview" fill className="object-cover" />
+                                        <button
+                                            type="button"
+                                            className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-bold"
+                                            onClick={() => removeNewSubImage(idx)}
+                                        >
+                                            削除
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        <p className="text-xs text-muted-foreground">完成後の各アングルや、制作工程などを追加できます。</p>
+                    </div>
                 </div>
 
                 {/* 右カラム: 基本情報 */}

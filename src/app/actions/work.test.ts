@@ -70,6 +70,49 @@ describe('Work Actions', () => {
         })
     })
 
+    describe('updateWork', () => {
+        it('updates basic info and handles sub-images addition/deletion', async () => {
+            authMock.mockResolvedValue({ user: { email: 'admin@example.com' } })
+
+            const existingWork = {
+                id: '1',
+                mainImage: '/uploads/old-main.jpg',
+                images: [{ id: 'img1', url: '/uploads/sub1.jpg' }]
+            }
+            prismaMock.work.findUnique.mockResolvedValue(existingWork)
+
+            const formData = new FormData()
+            formData.append('title', 'Updated Title')
+            formData.append('tags', 'tag1')
+
+            // 新規サブ写真の追加 (2枚)
+            const newSubFile1 = new File(['hello'], 'new-sub1.jpg', { type: 'image/jpeg' })
+            newSubFile1.arrayBuffer = vi.fn().mockResolvedValue(new ArrayBuffer(0))
+            const newSubFile2 = new File(['world'], 'new-sub2.jpg', { type: 'image/jpeg' })
+            newSubFile2.arrayBuffer = vi.fn().mockResolvedValue(new ArrayBuffer(0))
+
+            formData.append('subImages', newSubFile1)
+            formData.append('subImages', newSubFile2)
+
+            // 削除対象の指定 (URLで指定する想定)
+            formData.append('deleteImageUrls', '/uploads/sub1.jpg')
+
+            await updateWork('1', formData)
+
+            // prisma.work.update が呼ばれ、適切なトランザクションが実行されることを期待
+            expect(prismaMock.work.update).toHaveBeenCalled()
+            // 削除対象の画像レコードが削除されることを期待
+            expect(prismaMock.image.deleteMany).toHaveBeenCalledWith({
+                where: {
+                    url: { in: ['/uploads/sub1.jpg'] },
+                    workId: '1'
+                }
+            })
+            // 2枚の画像が保存されることを期待
+            expect(prismaMock.image.create).toHaveBeenCalledTimes(2)
+        })
+    })
+
     describe('getTags', () => {
         it('returns all unique tag names', async () => {
             const mockTags = [

@@ -42,6 +42,8 @@ const buttonVariants = cva(
 
 import { motion } from "framer-motion"
 
+const MotionSlot = motion(Slot.Root)
+
 function Button({
   className,
   variant = "default",
@@ -52,24 +54,19 @@ function Button({
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
   }) {
-  const Comp = asChild ? Slot.Root : "button"
+  const Comp = asChild ? MotionSlot : motion.button
 
   return (
-    <motion.div
-      className="inline-flex shrink-0"
-      layout
+    <Comp
+      data-slot="button"
+      data-variant={variant}
+      data-size={size}
+      className={cn(buttonVariants({ variant, size }), className)}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       transition={{ type: "spring", stiffness: 400, damping: 17 }}
-    >
-      <Comp
-        data-slot="button"
-        data-variant={variant}
-        data-size={size}
-        className={cn(buttonVariants({ variant, size, className }), "w-full")}
-        {...props}
-      />
-    </motion.div>
+      {...(props as any)}
+    />
   )
 }
 

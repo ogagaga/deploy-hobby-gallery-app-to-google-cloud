@@ -1,13 +1,21 @@
 import { writeFile, mkdir, unlink } from "fs/promises"
 import { join } from "path"
 import { Storage } from "@google-cloud/storage"
+import sharp from "sharp"
 
 const storage = new Storage()
 const bucketName = process.env.GCS_BUCKET_NAME
 
 export async function saveImage(file: File, prefix: string): Promise<string> {
     const fileName = `${Date.now()}-${prefix}-${file.name}`
-    const buffer = Buffer.from(await file.arrayBuffer())
+    const inputBuffer = Buffer.from(await file.arrayBuffer())
+
+    // sharp を使用してメタデータを削除し、画像の向き（Orientation）を補正
+    // rotate() は EXIF の Orientation タグに基づいて画像を回転させ、タグをリセットする
+    // デフォルトでメタデータは削除される（withMetadata を呼ばない限り）
+    const buffer = await sharp(inputBuffer)
+        .rotate()
+        .toBuffer()
 
     if (bucketName) {
         // Cloud Storage に保存

@@ -57,12 +57,14 @@ export function WorkForm({ initialData }: WorkFormProps) {
 
     const [deleteImageUrls, setDeleteImageUrls] = useState<string[]>([])
     const [description, setDescription] = useState(initialData?.description || "")
+    const [errors, setErrors] = useState<Record<string, string[]>>({})
 
     const isEdit = !!initialData
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
         setIsPending(true)
+        setErrors({})
 
         const formData = new FormData(event.currentTarget)
 
@@ -82,39 +84,63 @@ export function WorkForm({ initialData }: WorkFormProps) {
         deleteImageUrls.forEach(url => formData.append("deleteImageUrls", url))
 
         try {
+            let result;
             if (isEdit) {
-                const result = await updateWork(initialData!.id, formData)
-                if (result.success) {
-                    toast.success("作品を更新しました")
+                result = await updateWork(initialData!.id, formData)
+            } else {
+                result = await createWork(formData)
+            }
+
+            if (result.success) {
+                toast.success(isEdit ? "作品を更新しました" : "作品を投稿しました")
+                if (isEdit && "id" in result) {
                     router.push(`/works/${result.id}`)
+                } else {
+                    router.push("/")
                 }
             } else {
-                const result = await createWork(formData)
-                if (result.success) {
-                    toast.success("作品を投稿しました")
-                    router.push("/")
+                // バリデーションエラーなどの個別エラー
+                if (result.details) {
+                    setErrors(result.details)
+                    toast.error(result.error || "入力内容に不備があります。")
+                } else {
+                    toast.error(result.error || "失敗しました。")
                 }
             }
         } catch (error) {
             console.error(error)
-            toast.error(`${isEdit ? "更新" : "投稿"}に失敗しました。`)
+            toast.error("予期せぬエラーが発生しました。")
         } finally {
             setIsPending(false)
         }
+    }
+
+    // エラー表示用ヘルパー
+    const ErrorMessage = ({ field }: { field: string }) => {
+        if (!errors[field]) return null
+        return (
+            <p className="text-sm font-medium text-destructive mt-1 animate-in fade-in slide-in-from-top-1">
+                {errors[field][0]}
+            </p>
+        )
     }
 
     const handleMainImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file) {
             const compressionToastId = toast.loading("画像を最適化中...")
-            const compressedFile = await compressImage(file)
-            toast.dismiss(compressionToastId)
+            try {
+                const compressedFile = await compressImage(file)
+                toast.dismiss(compressionToastId)
 
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                setMainImagePreview(reader.result as string)
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                    setMainImagePreview(reader.result as string)
+                }
+                reader.readAsDataURL(compressedFile)
+            } catch (err) {
+                toast.error("画像の圧縮に失敗しました", { id: compressionToastId })
             }
-            reader.readAsDataURL(compressedFile)
         }
     }
 
@@ -124,27 +150,29 @@ export function WorkForm({ initialData }: WorkFormProps) {
             const fileList = Array.from(files)
             const compressionToastId = toast.loading(`${fileList.length}枚の画像を最適化中...`)
 
-            for (const file of fileList) {
-                const compressedFile = await compressImage(file)
-                const reader = new FileReader()
-                const tempId = Math.random().toString(36).substring(7)
+            try {
+                for (const file of fileList) {
+                    const compressedFile = await compressImage(file)
+                    const reader = new FileReader()
+                    const tempId = Math.random().toString(36).substring(7)
 
-                // Promise でラップして順次処理または一括処理を待機
-                await new Promise<void>((resolve) => {
-                    reader.onloadend = () => {
-                        setSubImages(prev => [...prev, {
-                            url: reader.result as string,
-                            file: compressedFile, // 圧縮後のファイルを保存
-                            isNew: true,
-                            tempId: tempId
-                        }])
-                        resolve()
-                    }
-                    reader.readAsDataURL(compressedFile)
-                })
+                    await new Promise<void>((resolve) => {
+                        reader.onloadend = () => {
+                            setSubImages(prev => [...prev, {
+                                url: reader.result as string,
+                                file: compressedFile,
+                                isNew: true,
+                                tempId: tempId
+                            }])
+                            resolve()
+                        }
+                        reader.readAsDataURL(compressedFile)
+                    })
+                }
+                toast.success("画像の最適化が完了しました", { id: compressionToastId })
+            } catch (err) {
+                toast.error("一部の画像で圧縮に失敗しました", { id: compressionToastId })
             }
-
-            toast.success("画像の最適化が完了しました", { id: compressionToastId })
             e.target.value = ""
         }
     }
@@ -164,7 +192,8 @@ export function WorkForm({ initialData }: WorkFormProps) {
                     <div className="space-y-2">
                         <Label htmlFor="mainImage" className="text-lg font-bold">メイン写真 {!isEdit && <span className="text-destructive">*</span>}</Label>
                         <div
-                            className="relative aspect-square rounded-2xl border-2 border-dashed border-muted-foreground/25 bg-muted/5 hover:bg-muted/10 transition-colors overflow-hidden group cursor-pointer"
+                            className={`relative aspect-square rounded-2xl border-2 border-dashed transition-colors overflow-hidden group cursor-pointer ${errors.mainImage ? "border-destructive/50 bg-destructive/5" : "border-muted-foreground/25 bg-muted/5 hover:bg-muted/10"
+                                }`}
                             onClick={() => document.getElementById('mainImage')?.click()}
                         >
                             {mainImagePreview ? (
@@ -178,7 +207,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
                                 <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground">
                                     <Upload className="w-12 h-12 mb-4 opacity-20" />
                                     <p className="font-medium">クリックして画像を選択</p>
-                                    <p className="text-xs opacity-60 mt-1">PNG, JPG, WebP (最大 10MB)</p>
+                                    <p className="text-xs opacity-60 mt-1">PNG, JPG, WebP (最大 5MB)</p>
                                 </div>
                             )}
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
@@ -197,6 +226,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
                             className="hidden"
                             onChange={handleMainImageChange}
                         />
+                        <ErrorMessage field="mainImage" />
                     </div>
 
                     <div className="space-y-4">
@@ -294,17 +324,26 @@ export function WorkForm({ initialData }: WorkFormProps) {
                 <div className="space-y-6">
                     <div className="space-y-2">
                         <Label htmlFor="title" className="text-lg font-bold">作品名 <span className="text-destructive">*</span></Label>
-                        <Input id="title" name="title" placeholder="例: RX-78-2 ガンダム Ver.Ka" required defaultValue={initialData?.title} className="text-lg h-12" />
+                        <Input
+                            id="title"
+                            name="title"
+                            placeholder="例: RX-78-2 ガンダム Ver.Ka"
+                            defaultValue={initialData?.title}
+                            className={`text-lg h-12 ${errors.title ? "border-destructive ring-destructive/20" : ""}`}
+                        />
+                        <ErrorMessage field="title" />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="kitName" className="font-bold">キット名</Label>
                             <Input id="kitName" name="kitName" placeholder="MG 1/100 ガンダム" defaultValue={initialData?.kitName || ""} />
+                            <ErrorMessage field="kitName" />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="maker" className="font-bold">メーカー</Label>
                             <Input id="maker" name="maker" placeholder="BANDAISPIRITS" defaultValue={initialData?.maker || ""} />
+                            <ErrorMessage field="maker" />
                         </div>
                     </div>
 
@@ -312,21 +351,25 @@ export function WorkForm({ initialData }: WorkFormProps) {
                         <div className="space-y-2">
                             <Label htmlFor="scale" className="font-bold">スケール</Label>
                             <Input id="scale" name="scale" placeholder="1/100" defaultValue={initialData?.scale || ""} />
+                            <ErrorMessage field="scale" />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="genre" className="font-bold">ジャンル</Label>
                             <Input id="genre" name="genre" placeholder="キャラクターモデル" defaultValue={initialData?.genre || ""} />
+                            <ErrorMessage field="genre" />
                         </div>
                     </div>
 
                     <div className="space-y-2">
                         <Label htmlFor="tags" className="font-bold">タグ（カンマ区切り）</Label>
                         <TagAutoComplete name="tags" defaultValue={initialData?.tags.map(t => t.name).join(", ") || ""} />
+                        <ErrorMessage field="tags" />
                     </div>
 
                     <div className="space-y-2">
                         <Label htmlFor="paints" className="font-bold">使用塗料・マテリアル</Label>
                         <Textarea id="paints" name="paints" placeholder="ラッカー塗料、エナメル塗料など" rows={3} defaultValue={initialData?.paints || ""} />
+                        <ErrorMessage field="paints" />
                     </div>
                 </div>
             </div>
@@ -339,6 +382,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
                     placeholder="こだわったポイントや、制作の感想などを自由に書いてください。"
                 />
                 <input type="hidden" name="description" value={description} />
+                <ErrorMessage field="description" />
             </div>
 
             <div className="flex justify-end gap-4 pt-4">

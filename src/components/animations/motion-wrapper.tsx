@@ -39,9 +39,7 @@ export function MotionContainer({ children, className }: MotionContainerProps) {
             animate="show"
             className={className}
         >
-            <AnimatePresence mode="popLayout">
-                {children}
-            </AnimatePresence>
+            {children}
         </motion.div>
     )
 }

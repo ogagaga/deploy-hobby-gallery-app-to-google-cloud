@@ -15,6 +15,7 @@ interface WorkCardProps {
         genre: string | null
         mainImage: string
         tags: { name: string }[]
+        project?: { name: string } | null
     }
 }
 
@@ -56,7 +57,22 @@ export function WorkCard({ work }: WorkCardProps) {
                                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                                 containerClassName="w-full h-full"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 flex items-end p-8">
+                            {/* Badges Overlay */}
+                            <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
+                                {work.genre && (
+                                    <Badge variant="secondary" className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-none shadow-sm font-bold rounded-full px-3 text-[10px] uppercase">
+                                        {work.genre}
+                                    </Badge>
+                                )}
+                                {work.project && (
+                                    <Badge className="bg-primary/90 text-primary-foreground backdrop-blur-md border-none shadow-lg font-black rounded-full px-3 text-[10px] uppercase tracking-tighter">
+                                        Series: {work.project.name}
+                                    </Badge>
+                                )}
+                            </div>
+
+                            {/* Hover Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 flex items-end p-8">
                                 <motion.p
                                     className="text-white text-sm font-bold tracking-tight"
                                     initial={{ opacity: 0, y: 10 }}
@@ -66,11 +82,6 @@ export function WorkCard({ work }: WorkCardProps) {
                                     VIEW DETAILS <span className="ml-2">→</span>
                                 </motion.p>
                             </div>
-                            {work.genre && (
-                                <Badge className="absolute top-4 left-4 z-20 rounded-full bg-white/95 dark:bg-zinc-900/95 text-foreground border-none backdrop-blur-xl shadow-md px-4 py-1 text-[10px] font-bold tracking-wider uppercase">
-                                    {work.genre}
-                                </Badge>
-                            )}
                         </div>
                     </CardHeader>
                     <CardContent className="p-6">
@@ -102,6 +113,6 @@ export function WorkCard({ work }: WorkCardProps) {
                     </CardContent>
                 </Card>
             </Link>
-        </motion.div>
+        </motion.div >
     )
 }

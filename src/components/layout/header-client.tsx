@@ -67,6 +67,9 @@ export function HeaderClient({ session }: HeaderProps) {
                     <Link href="/welcome" className="hover:text-primary transition-colors">
                         ABOUT
                     </Link>
+                    <Link href="/projects" className="hover:text-primary transition-colors">
+                        PROJECTS
+                    </Link>
                 </div>
                 <div className="flex items-center gap-4">
                     <ThemeToggle />

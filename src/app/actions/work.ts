@@ -1,67 +1,19 @@
 "use server"
 
-import { writeFile, mkdir, unlink } from "fs/promises"
-import { join } from "path"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
 import { revalidatePath } from "next/cache"
-import { Storage } from "@google-cloud/storage"
+import { saveImage, deleteImage } from "@/lib/storage"
 import { createWorkSchema, updateWorkSchema } from "@/lib/validations"
 
-const storage = new Storage()
-const bucketName = process.env.GCS_BUCKET_NAME
-
 // 権限チェックヘルパー
-async function checkAdmin() {
+export async function checkAdmin() {
     const session = await auth()
-    if (!session || session.user?.email !== process.env.ADMIN_EMAIL) {
-        throw new Error("Unauthorized")
+    if (!session?.user?.email || session.user.email !== process.env.ADMIN_EMAIL) {
+        throw new Error("管理者権限が必要です。")
     }
 }
 
-async function saveImage(file: File, prefix: string): Promise<string> {
-    const fileName = `${Date.now()}-${prefix}-${file.name}`
-    const buffer = Buffer.from(await file.arrayBuffer())
-
-    if (bucketName) {
-        // Cloud Storage に保存
-        const bucket = storage.bucket(bucketName)
-        const gcsFile = bucket.file(`uploads/${fileName}`)
-        await gcsFile.save(buffer, {
-            contentType: file.type,
-        })
-        // 公開URLを返す
-        return `https://storage.googleapis.com/${bucketName}/uploads/${fileName}`
-    } else {
-        // ローカルに保存
-        const uploadDir = join(process.cwd(), "public", "uploads")
-        await mkdir(uploadDir, { recursive: true })
-        const filePath = join(uploadDir, fileName)
-        await writeFile(filePath, buffer)
-        return `/uploads/${fileName}`
-    }
-}
-
-async function deleteImage(url: string) {
-    if (bucketName && url.startsWith("https://storage.googleapis.com")) {
-        // Cloud Storage から削除
-        const bucket = storage.bucket(bucketName)
-        const fileName = url.split(`${bucketName}/`)[1]
-        try {
-            await bucket.file(fileName).delete()
-        } catch (e) {
-            console.error(`Failed to delete GCS file: ${fileName}`, e)
-        }
-    } else if (url.startsWith("/uploads/")) {
-        // ローカルから削除
-        const filePath = join(process.cwd(), "public", url)
-        try {
-            await unlink(filePath)
-        } catch (e) {
-            console.error(`Failed to delete local file: ${filePath}`, e)
-        }
-    }
-}
 
 export async function createWork(formData: FormData) {
     try {
@@ -77,6 +29,7 @@ export async function createWork(formData: FormData) {
             paints: formData.get("paints"),
             description: formData.get("description"),
             tags: formData.get("tags"),
+            projectId: formData.get("projectId"), // 追加
             mainImage: formData.get("mainImage"),
             subImages: formData.getAll("subImages"),
         }
@@ -122,6 +75,7 @@ export async function createWork(formData: FormData) {
                 paints: data.paints,
                 description: data.description,
                 mainImage: mainImageUrl,
+                projectId: data.projectId || null, // 追加
                 images: {
                     create: subImageUrls.map((url, index) => ({
                         url,
@@ -158,6 +112,7 @@ export async function updateWork(id: string, formData: FormData) {
             paints: formData.get("paints"),
             description: formData.get("description"),
             tags: formData.get("tags"),
+            projectId: formData.get("projectId"), // 追加
             mainImage: formData.get("mainImage"),
             deleteImageUrls: formData.getAll("deleteImageUrls"),
             imageOrder: formData.get("imageOrder"),
@@ -202,13 +157,14 @@ export async function updateWork(id: string, formData: FormData) {
                 where: { id },
                 data: {
                     title: data.title,
-                    kitName: data.kitName,
-                    maker: data.maker,
-                    scale: data.scale,
-                    genre: data.genre,
-                    paints: data.paints,
-                    description: data.description,
+                    kitName: data.kitName || null,
+                    maker: data.maker || null,
+                    scale: data.scale || null,
+                    genre: data.genre || null,
+                    paints: data.paints || null,
+                    description: data.description || null,
                     mainImage: mainImageUrl,
+                    projectId: data.projectId || null, // 追加
                     tags: {
                         set: [],
                         connectOrCreate: tagNames.map(name => ({
@@ -332,6 +288,9 @@ export async function getWorks(page: number = 1, limit: number = 8) {
             },
             include: {
                 tags: true,
+                project: {
+                    select: { name: true }
+                }
             },
         })
 

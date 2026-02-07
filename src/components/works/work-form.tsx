@@ -28,6 +28,7 @@ interface WorkFormProps {
         tags: { name: string }[]
         images: { id: string, url: string }[]
     }
+    projects?: any[] // Project[] だが、簡易化のため any[]
 }
 
 import { Reorder } from "framer-motion"
@@ -40,7 +41,7 @@ type SubImage = {
     tempId: string
 }
 
-export function WorkForm({ initialData }: WorkFormProps) {
+export function WorkForm({ initialData, projects = [] }: WorkFormProps) {
     const router = useRouter()
     const [isPending, setIsPending] = useState(false)
     const [mainImagePreview, setMainImagePreview] = useState<string | null>(initialData?.mainImage || null)
@@ -358,6 +359,25 @@ export function WorkForm({ initialData }: WorkFormProps) {
                             <Input id="genre" name="genre" placeholder="キャラクターモデル" defaultValue={initialData?.genre || ""} />
                             <ErrorMessage field="genre" />
                         </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="projectId" className="font-bold text-primary">所属プロジェクト（シリーズ）</Label>
+                        <select
+                            id="projectId"
+                            name="projectId"
+                            defaultValue={initialData?.projectId || ""}
+                            className="flex h-12 w-full rounded-2xl border border-input bg-background px-4 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-sm focus:border-primary"
+                        >
+                            <option value="">なし（単独作品）</option>
+                            {projects.map((project: any) => (
+                                <option key={project.id} value={project.id}>
+                                    {project.name}
+                                </option>
+                            ))}
+                        </select>
+                        <p className="text-[10px] text-muted-foreground ml-1">※プロジェクトを選択すると、関連作品としてまとめられます。</p>
+                        <ErrorMessage field="projectId" />
                     </div>
 
                     <div className="space-y-2">

@@ -1,6 +1,8 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { WorkForm } from "@/components/works/work-form"
+import { getProjects } from "@/app/actions/project"
+import { prisma } from "@/lib/prisma"
 
 export default async function NewWorkPage() {
     const session = await auth()
@@ -10,10 +12,12 @@ export default async function NewWorkPage() {
         redirect("/")
     }
 
+    const projects = await getProjects()
+
     return (
         <div className="container mx-auto py-10">
             <h1 className="text-3xl font-bold mb-8 text-center">作品を登録する</h1>
-            <WorkForm />
+            <WorkForm projects={projects} />
         </div>
     )
 }

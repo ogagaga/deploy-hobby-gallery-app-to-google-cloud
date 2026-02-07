@@ -72,6 +72,10 @@ export const workSchema = z.object({
         .string()
         .optional()
         .or(z.literal("")),
+    projectId: z
+        .string()
+        .optional()
+        .or(z.literal("")),
 });
 
 // 新規作成用（必須フィールド込み）
@@ -85,4 +89,24 @@ export const updateWorkSchema = workSchema.extend({
     mainImage: optionalImageFileSchema.optional(),
     deleteImageUrls: z.array(z.string()).optional(),
     imageOrder: z.string().optional(), // JSON文字列として送られてくるため
+});
+// --- プロジェクトバリデーションスキーマ ---
+export const projectSchema = z.object({
+    name: z
+        .string()
+        .min(1, "プロジェクト名を入力してください。")
+        .max(100, "プロジェクト名は100文字以内で入力してください。"),
+    description: z
+        .string()
+        .max(2000, "説明文は2000文字以内で入力してください。")
+        .optional()
+        .or(z.literal("")),
+});
+
+export const createProjectSchema = projectSchema.extend({
+    mainImage: optionalImageFileSchema.optional(), // プロジェクトは画像無しでも可
+});
+
+export const updateProjectSchema = projectSchema.extend({
+    mainImage: optionalImageFileSchema.optional(),
 });

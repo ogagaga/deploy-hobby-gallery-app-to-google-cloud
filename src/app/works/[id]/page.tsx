@@ -18,7 +18,11 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
     const work = await prisma.work.findUnique({
         where: { id },
         include: {
-            images: true,
+            images: {
+                orderBy: {
+                    order: "asc"
+                }
+            },
             tags: true,
         },
     })

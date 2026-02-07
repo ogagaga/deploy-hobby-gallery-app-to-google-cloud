@@ -100,7 +100,10 @@ export async function createWork(formData: FormData) {
             description,
             mainImage: mainImageUrl,
             images: {
-                create: subImageUrls.map(url => ({ url }))
+                create: subImageUrls.map((url, index) => ({
+                    url,
+                    order: index
+                }))
             },
             tags: {
                 connectOrCreate: tagNames.map(name => ({
@@ -153,6 +156,9 @@ export async function updateWork(id: string, formData: FormData) {
 
     const tagNames = tagsString ? tagsString.split(",").map(t => t.trim()).filter(Boolean) : []
 
+    const imageOrderJson = formData.get("imageOrder") as string
+    const imageOrder = imageOrderJson ? JSON.parse(imageOrderJson) : []
+
     await prisma.$transaction(async (tx: any) => {
         // 作品情報の更新
         await tx.work.update({
@@ -191,15 +197,42 @@ export async function updateWork(id: string, formData: FormData) {
         }
 
         // 新規サブ写真の保存
+        const newImageUrls: string[] = []
         for (const file of subImageFiles) {
             if (file.size > 0) {
                 const url = await saveImage(file, "sub")
-                await tx.image.create({
+                const newImg = await tx.image.create({
                     data: {
                         url,
-                        workId: id
+                        workId: id,
+                        order: 999 // 一旦大きな値を入れておく（後で一括更新）
                     }
                 })
+                newImageUrls.push(newImg.url)
+            }
+        }
+
+        // 全画像の順序を一括更新
+        // imageOrder: Array<{ id?: string, url?: string, isNew?: boolean, tempId?: string }>
+        // newImageUrls はアップロード順に並んでいるはずなので、isNew のものに順番に割り当てる
+        let newIdx = 0
+        for (let i = 0; i < imageOrder.length; i++) {
+            const item = imageOrder[i]
+            if (item.id) {
+                // 既存画像
+                await tx.image.update({
+                    where: { id: item.id },
+                    data: { order: i }
+                })
+            } else if (item.isNew) {
+                // 新規画像
+                const url = newImageUrls[newIdx++]
+                if (url) {
+                    await tx.image.updateMany({
+                        where: { url, workId: id },
+                        data: { order: i }
+                    })
+                }
             }
         }
     })

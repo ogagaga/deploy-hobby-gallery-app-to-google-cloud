@@ -21,7 +21,11 @@ export default async function EditWorkPage({ params }: EditWorkPageProps) {
         where: { id },
         include: {
             tags: true,
-            images: true,
+            images: {
+                orderBy: {
+                    order: "asc"
+                }
+            },
         },
     })
 

@@ -34,6 +34,7 @@ model Work {
 model Image {
   id      String @id @default(cuid())
   url     String
+  order   Int    @default(0) // 表示順序
   workId  String
   work    Work   @relation(fields: [workId], references: [id], onDelete: Cascade)
 }

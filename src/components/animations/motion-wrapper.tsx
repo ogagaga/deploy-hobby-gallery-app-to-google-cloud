@@ -1,9 +1,9 @@
 "use client"
 
-import { motion, Variants, AnimatePresence } from "framer-motion"
+import { motion, HTMLMotionProps, Variants } from "framer-motion"
 import { ReactNode } from "react"
 
-interface MotionContainerProps {
+interface MotionProps extends HTMLMotionProps<"div"> {
     children: ReactNode
     className?: string
 }
@@ -14,7 +14,7 @@ const containerVariants: Variants = {
         opacity: 1,
         transition: {
             staggerChildren: 0.1,
-            delayChildren: 0.2,
+            delayChildren: 0.1,
         },
     },
 }
@@ -25,26 +25,29 @@ const itemVariants: Variants = {
         opacity: 1,
         y: 0,
         transition: {
-            duration: 0.8,
-            ease: [0.16, 1, 0.3, 1] // Custom cubic-bezier for premium feel
-        }
+            type: "spring",
+            stiffness: 100,
+            damping: 15,
+        },
     },
 }
 
-export function MotionContainer({ children, className }: MotionContainerProps) {
+export function MotionContainer({ children, className, ...props }: MotionProps) {
     return (
         <motion.div
             variants={containerVariants}
             initial="hidden"
-            animate="show"
+            whileInView="show"
+            viewport={{ once: true }}
             className={className}
+            {...props}
         >
             {children}
         </motion.div>
     )
 }
 
-export function MotionItem({ children, className }: { children: ReactNode, className?: string }) {
+export function MotionItem({ children, className, ...props }: MotionProps) {
     return (
         <motion.div
             variants={itemVariants}
@@ -54,6 +57,7 @@ export function MotionItem({ children, className }: { children: ReactNode, class
             exit="hidden"
             layout
             className={className}
+            {...props}
         >
             {children}
         </motion.div>

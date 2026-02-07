@@ -53,6 +53,7 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                 {/* 左カラム: 画像セクション (7/12) */}
                 <div className="lg:col-span-7 space-y-8">
                     <MotionItem
+                        layoutId="main-image"
                         className="relative aspect-square w-full rounded-[2.5rem] overflow-hidden bg-white dark:bg-zinc-900 border shadow-2xl shadow-zinc-200/50 dark:shadow-none ring-1 ring-zinc-200/50 dark:ring-zinc-800 cursor-zoom-in"
                     >
                         <OptimizedImage
@@ -71,6 +72,7 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                             {work.images.map((img: PrismaImage, idx: number) => (
                                 <MotionItem
                                     key={img.id}
+                                    layoutId={`sub-image-${idx}`}
                                     className="relative aspect-square rounded-3xl overflow-hidden border bg-white dark:bg-zinc-900 ring-1 ring-zinc-200/50 dark:ring-zinc-800 group cursor-zoom-in shadow-sm hover:shadow-md transition-all"
                                 >
                                     <OptimizedImage
@@ -166,6 +168,8 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                 images={allImages}
                 currentIndex={lightboxIndex}
                 onClose={() => setLightboxIndex(null)}
+                title={work.title}
+                kitName={work.kitName}
             />
         </MotionContainer>
     )

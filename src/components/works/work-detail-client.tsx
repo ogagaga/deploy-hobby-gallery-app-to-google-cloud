@@ -8,9 +8,10 @@ import Link from "next/link"
 import { Image as PrismaImage, Tag, Work } from "@prisma/client"
 import { DeleteButton } from "@/components/works/delete-button"
 import { MotionContainer, MotionItem } from "@/components/animations/motion-wrapper"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Lightbox } from "@/components/ui/lightbox"
 import { MarkdownRenderer } from "@/components/ui/markdown-renderer"
+import { useImageColors } from "@/hooks/use-image-colors"
 
 interface WorkDetailClientProps {
     work: Work & {
@@ -22,11 +23,36 @@ interface WorkDetailClientProps {
 
 export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+    const { colors } = useImageColors(work.mainImage)
 
-    const allImages = [work.mainImage, ...work.images.map(img => img.url)]
+    const allImages = useMemo(() => [work.mainImage, ...work.images.map(img => img.url)], [work])
+
+    // CSSカスタムプロパティのスタイルオブジェクトを作成
+    const dynamicStyles = {
+        "--vibrant": colors.vibrant || "var(--primary)",
+        "--light-vibrant": colors.lightVibrant || colors.vibrant || "var(--primary)",
+        "--dark-vibrant": colors.darkVibrant || "var(--primary)",
+        "--muted": colors.muted || "var(--muted-foreground)",
+        "--light-muted": colors.lightMuted || "var(--muted)",
+        "--dark-muted": colors.darkMuted || "var(--muted-foreground)",
+    } as React.CSSProperties
 
     return (
-        <MotionContainer className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <MotionContainer
+            className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 relative"
+            style={dynamicStyles}
+        >
+            {/* Dynamic Background Glow */}
+            <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+                <div
+                    className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full blur-[120px] opacity-20 dark:opacity-10 transition-colors duration-1000"
+                    style={{ backgroundColor: "var(--light-vibrant)" }}
+                />
+                <div
+                    className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full blur-[150px] opacity-15 dark:opacity-10 transition-colors duration-1000"
+                    style={{ backgroundColor: "var(--vibrant)" }}
+                />
+            </div>
             <MotionItem className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-12">
                 <Button asChild variant="ghost" className="hover:bg-accent/50 p-0 pr-4 flex items-center gap-2 w-fit rounded-full transition-all">
                     <Link href="/">
@@ -101,7 +127,13 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                         </div>
                         <div className="flex flex-wrap gap-2">
                             {work.genre && (
-                                <Badge className="rounded-full bg-primary/10 text-primary hover:bg-primary/20 border-none px-4 py-1 text-xs font-bold uppercase tracking-wider">
+                                <Badge
+                                    className="rounded-full border-none px-4 py-1 text-xs font-black uppercase tracking-widest shadow-lg shadow-[var(--vibrant)]/20 transition-colors duration-500"
+                                    style={{
+                                        backgroundColor: "var(--vibrant)",
+                                        color: "white" // 常に白文字でコントラスト確保
+                                    }}
+                                >
                                     {work.genre}
                                 </Badge>
                             )}
@@ -114,8 +146,11 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                     </MotionItem>
 
                     <MotionItem className="grid grid-cols-1 gap-4">
-                        <div className="flex items-center gap-5 p-6 rounded-[2rem] bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800">
-                            <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                        <div className="flex items-center gap-5 p-6 rounded-[2rem] bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--light-vibrant)]/5">
+                            <div
+                                className="w-12 h-12 rounded-2xl flex items-center justify-center transition-colors duration-500"
+                                style={{ backgroundColor: "var(--light-vibrant)", opacity: 0.8, color: "white" }}
+                            >
                                 <Package className="w-6 h-6" />
                             </div>
                             <div className="min-w-0">
@@ -127,8 +162,11 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-5 p-6 rounded-[2rem] bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800">
-                            <div className="w-12 h-12 rounded-2xl bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center text-cyan-600 dark:text-cyan-400">
+                        <div className="flex items-center gap-5 p-6 rounded-[2rem] bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--vibrant)]/5">
+                            <div
+                                className="w-12 h-12 rounded-2xl flex items-center justify-center transition-colors duration-500"
+                                style={{ backgroundColor: "var(--vibrant)", color: "white" }}
+                            >
                                 <Ruler className="w-6 h-6" />
                             </div>
                             <div>
@@ -138,8 +176,11 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                         </div>
 
                         {work.paints && (
-                            <div className="flex items-start gap-5 p-6 rounded-[2rem] bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800">
-                                <div className="w-12 h-12 rounded-2xl bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center text-pink-600 dark:text-pink-400 shrink-0">
+                            <div className="flex items-start gap-5 p-6 rounded-[2rem] bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--muted)]/5">
+                                <div
+                                    className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-colors duration-500"
+                                    style={{ backgroundColor: "var(--muted)", color: "white" }}
+                                >
                                     <Palette className="w-6 h-6" />
                                 </div>
                                 <div className="min-w-0">
@@ -152,7 +193,13 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
 
                     <MotionItem className="space-y-6">
                         <div className="flex items-center gap-3">
-                            <div className="w-1.5 h-8 bg-primary rounded-full shadow-[0_0_15px_rgba(var(--primary),0.5)]" />
+                            <div
+                                className="w-1.5 h-8 rounded-full shadow-lg transition-colors duration-500"
+                                style={{
+                                    backgroundColor: "var(--vibrant)",
+                                    boxShadow: "0 0 20px var(--vibrant)"
+                                }}
+                            />
                             <h3 className="text-2xl font-black tracking-tight tracking-tighter">DESIGN NOTES</h3>
                         </div>
                         <div className="relative">

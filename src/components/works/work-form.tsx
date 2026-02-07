@@ -11,6 +11,7 @@ import { Loader2, Upload, X } from "lucide-react"
 import { toast } from "sonner"
 import Image from "next/image"
 import { TagAutoComplete } from "./tag-auto-complete"
+import { compressImage } from "@/lib/image-compression"
 
 interface WorkFormProps {
     initialData?: {
@@ -28,7 +29,7 @@ interface WorkFormProps {
     }
 }
 
-import { motion, Reorder } from "framer-motion"
+import { Reorder } from "framer-motion"
 
 type SubImage = {
     id?: string
@@ -100,36 +101,48 @@ export function WorkForm({ initialData }: WorkFormProps) {
         }
     }
 
-    const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleMainImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file) {
+            const compressionToastId = toast.loading("画像を最適化中...")
+            const compressedFile = await compressImage(file)
+            toast.dismiss(compressionToastId)
+
             const reader = new FileReader()
             reader.onloadend = () => {
                 setMainImagePreview(reader.result as string)
             }
-            reader.readAsDataURL(file)
+            reader.readAsDataURL(compressedFile)
         }
     }
 
-    const handleSubImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSubImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files
         if (files) {
             const fileList = Array.from(files)
+            const compressionToastId = toast.loading(`${fileList.length}枚の画像を最適化中...`)
 
-            fileList.forEach(file => {
+            for (const file of fileList) {
+                const compressedFile = await compressImage(file)
                 const reader = new FileReader()
                 const tempId = Math.random().toString(36).substring(7)
-                reader.onloadend = () => {
-                    setSubImages(prev => [...prev, {
-                        url: reader.result as string,
-                        file: file,
-                        isNew: true,
-                        tempId: tempId
-                    }])
-                }
-                reader.readAsDataURL(file)
-            })
 
+                // Promise でラップして順次処理または一括処理を待機
+                await new Promise<void>((resolve) => {
+                    reader.onloadend = () => {
+                        setSubImages(prev => [...prev, {
+                            url: reader.result as string,
+                            file: compressedFile, // 圧縮後のファイルを保存
+                            isNew: true,
+                            tempId: tempId
+                        }])
+                        resolve()
+                    }
+                    reader.readAsDataURL(compressedFile)
+                })
+            }
+
+            toast.success("画像の最適化が完了しました", { id: compressionToastId })
             e.target.value = ""
         }
     }

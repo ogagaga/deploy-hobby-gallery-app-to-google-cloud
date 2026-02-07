@@ -7,6 +7,7 @@ import { Camera } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Session } from "next-auth"
 import { ThemeToggle } from "./theme-toggle"
+import { motion, useScroll, useSpring } from "framer-motion"
 
 interface HeaderProps {
     session: Session | null
@@ -14,6 +15,12 @@ interface HeaderProps {
 
 export function HeaderClient({ session }: HeaderProps) {
     const [isScrolled, setIsScrolled] = useState(false)
+    const { scrollYProgress } = useScroll()
+    const scaleX = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    })
 
     useEffect(() => {
         const handleScroll = () => {
@@ -26,23 +33,32 @@ export function HeaderClient({ session }: HeaderProps) {
     return (
         <header
             className={cn(
-                "sticky top-0 z-50 w-full transition-all duration-500",
+                "sticky top-0 z-50 w-full transition-all duration-700 ease-in-out",
                 isScrolled
-                    ? "h-16 glass shadow-lg border-b-primary/5"
-                    : "h-20 bg-transparent border-transparent"
+                    ? "h-16 glass shadow-2xl shadow-primary/5 border-b border-primary/5"
+                    : "h-24 bg-transparent border-transparent"
             )}
         >
+            {/* Scroll Progress Bar */}
+            <motion.div
+                className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary origin-left z-50"
+                style={{ scaleX }}
+            />
+
             <div className="container mx-auto h-full flex items-center justify-between px-6">
                 <Link href="/" className="flex items-center gap-3 group">
-                    <div className={cn(
-                        "rounded-2xl bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/30 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3",
-                        isScrolled ? "w-8 h-8" : "w-10 h-10"
-                    )}>
-                        <Camera className={cn("transition-all", isScrolled ? "w-5 h-5" : "w-6 h-6")} />
-                    </div>
+                    <motion.div
+                        layout
+                        className={cn(
+                            "rounded-2xl bg-primary flex items-center justify-center text-white shadow-xl shadow-primary/20 transition-all duration-500 group-hover:rotate-6",
+                            isScrolled ? "w-9 h-9" : "w-12 h-12"
+                        )}
+                    >
+                        <Camera className={cn("transition-all duration-500", isScrolled ? "w-5 h-5" : "w-6 h-6")} />
+                    </motion.div>
                     <span className={cn(
-                        "font-black tracking-tighter bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent transition-all duration-500",
-                        isScrolled ? "text-xl" : "text-2xl"
+                        "font-black tracking-tighter bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent transition-all duration-700",
+                        isScrolled ? "text-xl" : "text-3xl"
                     )}>
                         Hobby Gallery
                     </span>

@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
@@ -38,6 +40,8 @@ const buttonVariants = cva(
   }
 )
 
+import { motion } from "framer-motion"
+
 function Button({
   className,
   variant = "default",
@@ -51,13 +55,21 @@ function Button({
   const Comp = asChild ? Slot.Root : "button"
 
   return (
-    <Comp
-      data-slot="button"
-      data-variant={variant}
-      data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
+    <motion.div
+      className="inline-flex shrink-0"
+      layout
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    >
+      <Comp
+        data-slot="button"
+        data-variant={variant}
+        data-size={size}
+        className={cn(buttonVariants({ variant, size, className }), "w-full")}
+        {...props}
+      />
+    </motion.div>
   )
 }
 

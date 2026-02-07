@@ -49,7 +49,8 @@ export function MotionItem({ children, className }: { children: ReactNode, class
         <motion.div
             variants={itemVariants}
             initial="hidden"
-            animate="show"
+            whileInView="show"
+            viewport={{ once: true }}
             exit="hidden"
             layout
             className={className}

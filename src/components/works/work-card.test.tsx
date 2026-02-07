@@ -9,10 +9,17 @@ vi.mock('@/components/ui/optimized-image', () => ({
 
 // framer-motion の簡略化
 vi.mock('framer-motion', () => ({
-    motion: {
-        div: ({ children, ...props }: any) => <div {...props}>{children}</div>
-    },
-    AnimatePresence: ({ children }: any) => <>{children}</>
+    motion: new Proxy({}, {
+        get: (_target, property) => {
+            return ({ children, ...props }: any) => {
+                const Tag = property as any;
+                return <Tag {...props}>{children}</Tag>;
+            };
+        }
+    }),
+    AnimatePresence: ({ children }: any) => <>{children}</>,
+    useScroll: () => ({ scrollYProgress: { get: () => 0 } }),
+    useSpring: (v: any) => v,
 }))
 
 const mockWork = {
@@ -33,8 +40,8 @@ describe('WorkCard', () => {
         expect(screen.getByText(/Test Kit/)).toBeInTheDocument()
         expect(screen.getByText(/Test Maker/)).toBeInTheDocument()
         expect(screen.getByText('Test Genre')).toBeInTheDocument()
-        expect(screen.getByText('#Tag1')).toBeInTheDocument()
-        expect(screen.getByText('#Tag2')).toBeInTheDocument()
+        expect(screen.getByText('Tag1')).toBeInTheDocument()
+        expect(screen.getByText('Tag2')).toBeInTheDocument()
     })
 
     it('has a link to the work details page', () => {

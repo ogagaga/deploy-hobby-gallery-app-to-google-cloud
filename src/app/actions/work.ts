@@ -320,3 +320,31 @@ export async function getTags() {
         return []
     }
 }
+
+export async function getWorks(page: number = 1, limit: number = 8) {
+    try {
+        const skip = (page - 1) * limit
+        const works = await prisma.work.findMany({
+            skip,
+            take: limit,
+            orderBy: {
+                createdAt: "desc",
+            },
+            include: {
+                tags: true,
+            },
+        })
+
+        const total = await prisma.work.count()
+
+        return {
+            success: true,
+            works,
+            hasMore: skip + works.length < total,
+            total
+        }
+    } catch (error) {
+        console.error("[getWorks] Error:", error)
+        return { success: false, works: [], hasMore: false, total: 0 }
+    }
+}

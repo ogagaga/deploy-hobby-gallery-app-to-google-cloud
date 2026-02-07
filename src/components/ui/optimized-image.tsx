@@ -16,6 +16,7 @@ export function OptimizedImage({
     className,
     containerClassName,
     onClick,
+    sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
     ...props
 }: OptimizedImageProps) {
     const [isLoading, setIsLoading] = useState(true)
@@ -31,6 +32,7 @@ export function OptimizedImage({
             <Image
                 src={src}
                 alt={alt}
+                sizes={sizes}
                 className={cn(
                     "transition-all duration-700 ease-in-out relative z-10",
                     isLoading ? "scale-110 blur-xl grayscale" : "scale-100 blur-0 grayscale-0",

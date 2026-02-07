@@ -12,6 +12,7 @@ import { toast } from "sonner"
 import Image from "next/image"
 import { TagAutoComplete } from "./tag-auto-complete"
 import { compressImage } from "@/lib/image-compression"
+import { MarkdownEditor } from "./markdown-editor"
 
 interface WorkFormProps {
     initialData?: {
@@ -55,6 +56,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
     )
 
     const [deleteImageUrls, setDeleteImageUrls] = useState<string[]>([])
+    const [description, setDescription] = useState(initialData?.description || "")
 
     const isEdit = !!initialData
 
@@ -329,9 +331,14 @@ export function WorkForm({ initialData }: WorkFormProps) {
                 </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-4">
                 <Label htmlFor="description" className="text-lg font-bold">説明・制作ポイント</Label>
-                <Textarea id="description" name="description" placeholder="こだわったポイントや、制作の感想などを自由に書いてください。" rows={6} defaultValue={initialData?.description || ""} className="resize-none" />
+                <MarkdownEditor
+                    value={description}
+                    onChange={setDescription}
+                    placeholder="こだわったポイントや、制作の感想などを自由に書いてください。"
+                />
+                <input type="hidden" name="description" value={description} />
             </div>
 
             <div className="flex justify-end gap-4 pt-4">

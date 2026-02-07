@@ -10,6 +10,7 @@ import { DeleteButton } from "@/components/works/delete-button"
 import { MotionContainer, MotionItem } from "@/components/animations/motion-wrapper"
 import { useState } from "react"
 import { Lightbox } from "@/components/ui/lightbox"
+import { MarkdownRenderer } from "@/components/ui/markdown-renderer"
 
 interface WorkDetailClientProps {
     work: Work & {
@@ -156,9 +157,10 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                         </div>
                         <div className="relative">
                             <div className="absolute -left-4 top-0 bottom-0 w-px bg-zinc-100 dark:bg-zinc-800" />
-                            <p className="text-xl leading-relaxed whitespace-pre-wrap text-muted-foreground font-medium">
-                                {work.description || "説明はありません。"}
-                            </p>
+                            <MarkdownRenderer
+                                content={work.description || "説明はありません。"}
+                                className="text-xl leading-relaxed"
+                            />
                         </div>
                     </MotionItem>
                 </div>

@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Loader2, Upload } from "lucide-react"
 import { toast } from "sonner"
 import Image from "next/image"
+import { TagAutoComplete } from "./tag-auto-complete"
 
 interface WorkFormProps {
     initialData?: {
@@ -199,7 +200,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
 
                     <div className="space-y-2">
                         <Label htmlFor="tags" className="font-bold">タグ（カンマ区切り）</Label>
-                        <Input id="tags" name="tags" placeholder="ガンプラ, 筆塗り, ウェザリング" defaultValue={initialData?.tags.map(t => t.name).join(", ") || ""} />
+                        <TagAutoComplete name="tags" defaultValue={initialData?.tags.map(t => t.name).join(", ") || ""} />
                     </div>
 
                     <div className="space-y-2">

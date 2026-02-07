@@ -69,4 +69,23 @@ describe('Work Actions', () => {
             expect(revalidatePath).toHaveBeenCalledWith('/')
         })
     })
+
+    describe('getTags', () => {
+        it('returns all unique tag names', async () => {
+            const mockTags = [
+                { id: '1', name: 'TagA' },
+                { id: '2', name: 'TagB' }
+            ]
+            // @ts-ignore - getTags may not exist yet in the imported module
+            const { getTags } = await import('./work')
+            prismaMock.tag.findMany.mockResolvedValue(mockTags)
+
+            const tags = await getTags()
+
+            expect(tags).toEqual(['TagA', 'TagB'])
+            expect(prismaMock.tag.findMany).toHaveBeenCalledWith({
+                orderBy: { name: 'asc' }
+            })
+        })
+    })
 })

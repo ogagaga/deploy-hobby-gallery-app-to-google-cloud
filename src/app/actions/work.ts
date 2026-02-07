@@ -206,3 +206,12 @@ export async function deleteWork(id: string) {
     revalidatePath("/")
     return { success: true }
 }
+
+export async function getTags() {
+    const tags = await prisma.tag.findMany({
+        orderBy: {
+            name: "asc",
+        },
+    })
+    return tags.map(tag => tag.name)
+}

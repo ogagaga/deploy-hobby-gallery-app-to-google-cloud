@@ -12,6 +12,9 @@ export const prismaMock = {
     image: {
         deleteMany: vi.fn(),
     },
+    tag: {
+        findMany: vi.fn(),
+    },
     $transaction: vi.fn((cb) => cb(prismaMock)),
 }
 

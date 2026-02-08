@@ -27,7 +27,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          <main className="container mx-auto px-2 py-2">
+          <main className="container mx-auto max-w-[1800px] px-2 py-2">
             {children}
           </main>
           <ScrollToTop />

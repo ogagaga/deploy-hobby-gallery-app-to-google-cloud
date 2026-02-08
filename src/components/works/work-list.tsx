@@ -35,7 +35,7 @@ export function WorkList({ works }: WorkListProps) {
     }, [works, searchQuery, selectedGenre])
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-2">
             <div className="flex flex-col md:flex-row gap-4 items-end justify-between bg-white/40 dark:bg-zinc-900/40 p-2 rounded-xl glass border-none shadow-sm">
                 <div className="w-full md:max-w-xs space-y-1">
                     <label className="text-[10px] font-black uppercase tracking-widest opacity-60 ml-0.5">Search</label>
@@ -75,7 +75,7 @@ export function WorkList({ works }: WorkListProps) {
             </div>
 
             {filteredWorks.length > 0 ? (
-                <MotionContainer className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <MotionContainer className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
                     {filteredWorks.map((work) => (
                         <MotionItem key={work.id}>
                             <WorkCard work={work} />

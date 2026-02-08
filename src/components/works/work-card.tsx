@@ -34,7 +34,7 @@ export function WorkCard({ work }: WorkCardProps) {
         >
             <Link href={`/works/${work.id}`} className="block group">
                 <Card className="relative overflow-hidden border-none shadow-none bg-transparent transition-all duration-500">
-                    <CardHeader className="p-0 mb-3">
+                    <CardHeader className="p-0">
                         <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/50">
                             <OptimizedImage
                                 src={work.mainImage}

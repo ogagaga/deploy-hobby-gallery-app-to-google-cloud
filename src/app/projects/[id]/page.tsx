@@ -57,7 +57,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                             )}
                         </div>
                         <div className="flex-1 space-y-2">
-                            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+                            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
                                 <div className="space-y-0.5">
                                     <h1 className="text-3xl font-black tracking-tight tracking-tighter">{project.name}</h1>
                                     <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest opacity-80">
@@ -76,7 +76,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     </div>
                 </MotionItem>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
                     {project.works.map((work: any) => (
                         <MotionItem key={work.id}>
                             <WorkCard work={work} />

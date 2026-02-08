@@ -92,7 +92,7 @@ export function InfiniteWorkList({
                 </div>
 
                 <div className="w-full md:w-auto space-y-3">
-                    <label className="text-sm font-black uppercase tracking-widest opacity-60 ml-1 text-right block md:hidden lg:block">Filter by Genre</label>
+                    <label className="text-sm font-black uppercase tracking-widest opacity-60 ml-1 text-right block md:hidden lg:block">ジャンル</label>
                     <div className="flex flex-wrap gap-2 justify-end">
                         <Badge
                             variant={selectedGenre === null ? "default" : "outline"}

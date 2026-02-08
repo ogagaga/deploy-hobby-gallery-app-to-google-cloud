@@ -27,6 +27,7 @@ interface WorkFormProps {
         mainImage: string
         tags: { name: string }[]
         images: { id: string, url: string }[]
+        projectId?: string | null
     }
     projects?: any[] // Project[] だが、簡易化のため any[]
 }

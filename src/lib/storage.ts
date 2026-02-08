@@ -7,8 +7,25 @@ const storage = new Storage()
 const bucketName = process.env.GCS_BUCKET_NAME
 
 export async function saveImage(file: File, prefix: string): Promise<string> {
-    const fileName = `${Date.now()}-${prefix}-${file.name}`
     const inputBuffer = Buffer.from(await file.arrayBuffer())
+
+    // マジックバイト（バイナリシグネチャ）によるファイル種別の検証
+    // 不適切なファイル（実行ファイルやテキストファイル等）のアップロードを防止する
+    const isAllowedImage = (buffer: Buffer): boolean => {
+        // JPEG: FF D8 FF
+        if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) return true
+        // PNG: 89 50 4E 47
+        if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4e && buffer[3] === 0x47) return true
+        // WebP: RIFF (4bytes) WEBP (4bytes) -> 52 49 46 46 ... 57 45 42 50
+        if (buffer.toString("ascii", 0, 4) === "RIFF" && buffer.toString("ascii", 8, 12) === "WEBP") return true
+        return false
+    }
+
+    if (!isAllowedImage(inputBuffer)) {
+        throw new Error("Invalid file format. Only JPEG, PNG, and WebP are allowed.")
+    }
+
+    const fileName = `${Date.now()}-${prefix}-${file.name}`
 
     // sharp を使用してメタデータを削除し、画像の向き（Orientation）を補正
     // rotate() は EXIF の Orientation タグに基づいて画像を回転させ、タグをリセットする

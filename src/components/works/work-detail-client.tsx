@@ -81,16 +81,16 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                 <div className="lg:col-span-12 xl:col-span-8 space-y-4">
                     <MotionItem
                         layoutId="main-image"
-                        className="relative aspect-video w-full rounded-2xl overflow-hidden bg-white dark:bg-zinc-900 border shadow-lg shadow-zinc-200/50 dark:shadow-none ring-1 ring-zinc-200/50 dark:ring-zinc-800 cursor-zoom-in"
+                        className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden bg-zinc-100/50 dark:bg-zinc-900/50 border shadow-lg shadow-zinc-200/50 dark:shadow-none ring-1 ring-zinc-200/50 dark:ring-zinc-800 cursor-zoom-in"
+                        onClick={() => setLightboxIndex(0)}
                     >
                         <OptimizedImage
                             src={work.mainImage}
                             alt={work.title}
                             fill
-                            className="object-contain p-4"
                             priority
+                            className="object-contain"
                             containerClassName="w-full h-full"
-                            onClick={() => setLightboxIndex(0)}
                         />
                     </MotionItem>
 
@@ -100,15 +100,15 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                                 <MotionItem
                                     key={img.id}
                                     layoutId={`sub-image-${idx}`}
-                                    className="relative aspect-square rounded-lg overflow-hidden border bg-white dark:bg-zinc-900 ring-1 ring-zinc-200/50 dark:ring-zinc-800 group cursor-zoom-in shadow-sm hover:shadow-md transition-all"
+                                    className="relative aspect-square rounded-lg overflow-hidden border bg-zinc-100/50 dark:bg-zinc-900/50 ring-1 ring-zinc-200/50 dark:ring-zinc-800 group cursor-zoom-in shadow-sm hover:shadow-md transition-all"
+                                    onClick={() => setLightboxIndex(idx + 1)}
                                 >
                                     <OptimizedImage
                                         src={img.url}
-                                        alt="サブ画像"
+                                        alt={`${work.title} - ${idx + 2}`}
                                         fill
-                                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                        className="object-contain group-hover:scale-110 transition-transform duration-500"
                                         containerClassName="w-full h-full"
-                                        onClick={() => setLightboxIndex(idx + 1)}
                                     />
                                     <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                                 </MotionItem>

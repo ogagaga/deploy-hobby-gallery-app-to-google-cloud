@@ -49,12 +49,12 @@ export function WorkCard({ work }: WorkCardProps) {
                     </div>
 
                     <CardHeader className="p-0">
-                        <div className="relative aspect-[4/3] overflow-hidden">
+                        <div className="relative aspect-[4/3] overflow-hidden bg-zinc-100/50 dark:bg-zinc-900/50">
                             <OptimizedImage
                                 src={work.mainImage}
                                 alt={work.title}
                                 fill
-                                className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                                className="object-contain transition-transform duration-700 ease-out group-hover:scale-105"
                                 containerClassName="w-full h-full"
                             />
                             {/* Badges Overlay */}

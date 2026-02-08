@@ -27,9 +27,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     }
 
     return (
-        <div className="container mx-auto py-10 px-4">
-            <MotionContainer className="space-y-12">
-                <MotionItem className="space-y-6">
+        <div className="container mx-auto py-4 px-4">
+            <MotionContainer className="space-y-6">
+                <MotionItem className="space-y-4">
                     <Button asChild variant="ghost" className="rounded-full pl-2 pr-6 h-10 group">
                         <Link href="/projects" className="flex items-center gap-2">
                             <span className="bg-muted p-1.5 rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
@@ -39,7 +39,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                         </Link>
                     </Button>
 
-                    <div className="flex flex-col md:flex-row gap-10 items-start border-b pb-12">
+                    <div className="flex flex-col md:flex-row gap-10 items-start border-b pb-6">
                         <div className="w-full md:w-1/3 aspect-[4/3] rounded-[3rem] overflow-hidden bg-muted/20 relative">
                             {project.mainImage ? (
                                 <img

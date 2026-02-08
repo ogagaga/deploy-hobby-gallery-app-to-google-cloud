@@ -75,16 +75,16 @@ export function InfiniteWorkList({
     }, [works, searchQuery, selectedGenre])
 
     return (
-        <div className="space-y-10">
+        <div className="space-y-6">
             {/* フィルターセクション */}
-            <div className="flex flex-col md:flex-row gap-6 items-end justify-between bg-white/40 dark:bg-zinc-900/40 p-8 rounded-[2.5rem] glass border-none shadow-sm">
+            <div className="flex flex-col md:flex-row gap-4 items-end justify-between bg-white/40 dark:bg-zinc-900/40 p-4 md:p-6 rounded-[2rem] glass border-none shadow-sm">
                 <div className="w-full md:max-w-md space-y-3">
                     <label className="text-sm font-black uppercase tracking-widest opacity-60 ml-1">Search</label>
                     <div className="relative group">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                         <Input
                             placeholder="タイトル、タグ、キット名で検索..."
-                            className="pl-12 h-14 rounded-2xl bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 focus:ring-primary/20 transition-all text-base shadow-inner"
+                            className="pl-12 h-12 rounded-xl bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 focus:ring-primary/20 transition-all text-base shadow-inner"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -128,7 +128,7 @@ export function InfiniteWorkList({
 
                     {/* 読み込みトリガー */}
                     {hasMore && !searchQuery && !selectedGenre && (
-                        <div ref={ref} className="py-20 flex justify-center">
+                        <div ref={ref} className="py-10 flex justify-center">
                             {isLoading ? (
                                 <div className="flex flex-col items-center gap-4">
                                     <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -150,7 +150,7 @@ export function InfiniteWorkList({
 
             {/* 全件読み込み完了メッセージ */}
             {!hasMore && works.length > 0 && !searchQuery && !selectedGenre && (
-                <div className="py-20 text-center">
+                <div className="py-10 text-center">
                     <p className="text-xs font-bold uppercase tracking-widest opacity-20">— End of Collection —</p>
                 </div>
             )}

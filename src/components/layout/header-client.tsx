@@ -48,8 +48,8 @@ export function HeaderClient({ session }: HeaderProps) {
                 className={cn(
                     "sticky top-0 z-50 w-full transition-all duration-700 ease-in-out",
                     isScrolled
-                        ? "h-16 glass shadow-2xl shadow-primary/5 border-b border-primary/5"
-                        : "h-24 bg-transparent border-transparent"
+                        ? "h-14 glass shadow-2xl shadow-primary/5 border-b border-primary/5"
+                        : "h-20 bg-transparent border-transparent"
                 )}
             >
                 {/* Scroll Progress Bar */}
@@ -64,14 +64,14 @@ export function HeaderClient({ session }: HeaderProps) {
                             layout
                             className={cn(
                                 "rounded-2xl bg-primary flex items-center justify-center text-white shadow-xl shadow-primary/20 transition-all duration-500 group-hover:rotate-6",
-                                isScrolled ? "w-9 h-9" : "w-12 h-12"
+                                isScrolled ? "w-8 h-8" : "w-10 h-10"
                             )}
                         >
                             <Camera className={cn("transition-all duration-500", isScrolled ? "w-5 h-5" : "w-6 h-6")} />
                         </motion.div>
                         <span className={cn(
                             "font-black tracking-tighter bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent transition-all duration-700",
-                            isScrolled ? "text-xl" : "text-3xl"
+                            isScrolled ? "text-lg" : "text-2xl"
                         )}>
                             Hobby Gallery
                         </span>

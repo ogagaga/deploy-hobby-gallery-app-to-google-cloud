@@ -39,7 +39,7 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
 
     return (
         <MotionContainer
-            className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 relative"
+            className="max-w-6xl mx-auto py-6 px-4 sm:px-6 lg:px-8 relative"
             style={dynamicStyles}
         >
             {/* Dynamic Background Glow */}
@@ -53,7 +53,7 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                     style={{ backgroundColor: "var(--vibrant)" }}
                 />
             </div>
-            <MotionItem className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-12">
+            <MotionItem className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <Button asChild variant="ghost" className="hover:bg-accent/50 p-0 pr-4 flex items-center gap-2 w-fit rounded-full transition-all">
                     <Link href="/">
                         <div className="w-8 h-8 rounded-full bg-background border flex items-center justify-center shadow-sm">
@@ -76,9 +76,9 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                 )}
             </MotionItem>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 {/* 左カラム: 画像セクション (7/12) */}
-                <div className="lg:col-span-7 space-y-8">
+                <div className="lg:col-span-7 space-y-6">
                     <MotionItem
                         layoutId="main-image"
                         className="relative aspect-square w-full rounded-[2.5rem] overflow-hidden bg-white dark:bg-zinc-900 border shadow-2xl shadow-zinc-200/50 dark:shadow-none ring-1 ring-zinc-200/50 dark:ring-zinc-800 cursor-zoom-in"
@@ -95,7 +95,7 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                     </MotionItem>
 
                     {work.images.length > 0 && (
-                        <div className="grid grid-cols-4 gap-6">
+                        <div className="grid grid-cols-4 gap-4">
                             {work.images.map((img: PrismaImage, idx: number) => (
                                 <MotionItem
                                     key={img.id}
@@ -118,7 +118,7 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                 </div>
 
                 {/* 右カラム: 詳細情報セクション (5/12) */}
-                <div className="lg:col-span-5 space-y-12">
+                <div className="lg:col-span-5 space-y-6">
                     <MotionItem className="space-y-6">
                         <div className="space-y-2">
                             <h1 className="text-5xl font-black tracking-tight text-foreground leading-[1.1] tracking-tighter">
@@ -145,8 +145,8 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                         </div>
                     </MotionItem>
 
-                    <MotionItem className="grid grid-cols-1 gap-4">
-                        <div className="flex items-center gap-5 p-6 rounded-[2rem] bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--light-vibrant)]/5">
+                    <MotionItem className="grid grid-cols-1 gap-3">
+                        <div className="flex items-center gap-4 p-3 rounded-[1.5rem] bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--light-vibrant)]/5">
                             <div
                                 className="w-12 h-12 rounded-2xl flex items-center justify-center transition-colors duration-500"
                                 style={{ backgroundColor: "var(--light-vibrant)", opacity: 0.8, color: "white" }}
@@ -162,7 +162,7 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-5 p-6 rounded-[2rem] bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--vibrant)]/5">
+                        <div className="flex items-center gap-4 p-3 rounded-[1.5rem] bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--vibrant)]/5">
                             <div
                                 className="w-12 h-12 rounded-2xl flex items-center justify-center transition-colors duration-500"
                                 style={{ backgroundColor: "var(--vibrant)", color: "white" }}
@@ -176,7 +176,7 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                         </div>
 
                         {work.paints && (
-                            <div className="flex items-start gap-5 p-6 rounded-[2rem] bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--muted)]/5">
+                            <div className="flex items-start gap-4 p-3 rounded-[1.5rem] bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--muted)]/5">
                                 <div
                                     className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-colors duration-500"
                                     style={{ backgroundColor: "var(--muted)", color: "white" }}
@@ -191,7 +191,7 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                         )}
                     </MotionItem>
 
-                    <MotionItem className="space-y-6">
+                    <MotionItem className="space-y-4">
                         <div className="flex items-center gap-3">
                             <div
                                 className="w-1.5 h-8 rounded-full shadow-lg transition-colors duration-500"

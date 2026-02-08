@@ -11,9 +11,9 @@ export default async function ProjectsPage() {
     const projects = await getProjects()
 
     return (
-        <div className="container mx-auto py-10 px-4">
-            <MotionContainer className="space-y-12">
-                <MotionItem className="flex items-center justify-between border-b pb-8">
+        <div className="container mx-auto py-4 px-4">
+            <MotionContainer className="space-y-6">
+                <MotionItem className="flex items-center justify-between border-b pb-4">
                     <div className="space-y-1">
                         <h1 className="text-4xl font-black tracking-tight tracking-tighter flex items-center gap-3">
                             <FolderOpen className="w-10 h-10 text-primary" />
@@ -24,7 +24,7 @@ export default async function ProjectsPage() {
                         </p>
                     </div>
                     {session?.user?.email === process.env.ADMIN_EMAIL && (
-                        <Button asChild size="lg" className="rounded-full px-8 shadow-xl hover:shadow-primary/20 transition-all duration-300 h-14 text-base font-bold">
+                        <Button asChild size="lg" className="rounded-full px-8 shadow-xl hover:shadow-primary/20 transition-all duration-300 h-12 text-base font-bold">
                             <Link href="/projects/new" className="flex items-center gap-2">
                                 <Plus className="w-5 h-5" />
                                 シリーズを作成

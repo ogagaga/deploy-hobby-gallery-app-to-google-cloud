@@ -1,6 +1,6 @@
 resource "google_service_account" "app_sa" {
   account_id   = "${var.app_name}-sa"
-  display_name = "Service Account for Hobby Gallery Cloud Run"
+  display_name = "Service Account for Oga's Plastic Model Gallery Cloud Run"
 }
 
 # Cloud SQL 接続権限

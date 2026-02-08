@@ -49,7 +49,7 @@ export function WelcomePopup({ userName }: WelcomePopupProps) {
                     </DialogHeader>
                     <div className="mt-8 space-y-4 text-muted-foreground font-medium leading-relaxed">
                         <p>
-                            Hobby Galleryへようこそ。今日も素晴らしい制作記録を、あなたのギャラリーに加えましょう。
+                            Oga&apos;s Plastic Model Galleryへようこそ。今日も素晴らしい制作記録を、あなたのギャラリーに加えましょう。
                         </p>
                     </div>
                 </div>

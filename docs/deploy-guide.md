@@ -1,6 +1,6 @@
 # Google Cloud デプロイ手順書
 
-このドキュメントでは、Hobby Gallery アプリケーションを Google Cloud (Cloud Run) にデプロイする手順を説明します。
+このドキュメントでは、Oga's Plastic Model Gallery アプリケーションを Google Cloud (Cloud Run) にデプロイする手順を説明します。
 
 ## 1. 前提条件
 

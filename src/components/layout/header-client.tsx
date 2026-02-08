@@ -73,7 +73,7 @@ export function HeaderClient({ session }: HeaderProps) {
                             "font-black tracking-tighter bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent transition-all duration-700",
                             isScrolled ? "text-base" : "text-xl"
                         )}>
-                            Hobby Gallery
+                            Oga&apos;s Plastic Model Gallery
                         </span>
                     </Link>
                     <div className="hidden md:flex ml-8 border-l pl-8 gap-6 text-sm font-bold text-muted-foreground/60">

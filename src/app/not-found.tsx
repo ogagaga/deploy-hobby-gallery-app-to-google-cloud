@@ -62,7 +62,7 @@ export default function NotFound() {
 
                 <div className="pt-12">
                     <p className="text-xs font-black uppercase tracking-[0.2em] opacity-20">
-                        Hobby Gallery Collection
+                        Oga&apos;s Plastic Model Gallery Collection
                     </p>
                 </div>
             </motion.div>

@@ -1,4 +1,4 @@
-# Hobby Gallery
+# Oga's Plastic Model Gallery
 
 プラモデルや模型の完成品写真を管理・展示するためのモダンなギャラリーアプリケーションです。
 

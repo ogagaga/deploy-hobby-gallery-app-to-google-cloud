@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "Hobby Gallery",
+  title: "Oga's Plastic Model Gallery",
   description: "プラモデル完成品ギャラリー",
 };
 

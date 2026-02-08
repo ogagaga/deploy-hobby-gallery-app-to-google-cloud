@@ -1,6 +1,6 @@
-# Hobby Gallery 機能仕様書
+# Oga's Plastic Model Gallery 機能仕様書
 
-このドキュメントでは、Hobby Gallery アプリケーションの機能仕様について記述します。
+このドキュメントでは、Oga's Plastic Model Gallery アプリケーションの機能仕様について記述します。
 
 ## 1. アプリケーション概要
 

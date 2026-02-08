@@ -16,7 +16,7 @@ export default function WelcomePage() {
                         </span>
                     </h1>
                     <p className="text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
-                        Hobby Galleryは、あなたのプラモデル制作の記録を写真と共に美しく保存・管理するための、あなただけのデジタル展示室です。
+                        Oga&apos;s Plastic Model Galleryは、あなたのプラモデル制作の記録を写真と共に美しく保存・管理するための、あなただけのデジタル展示室です。
                     </p>
                     <div className="pt-8">
                         <Button asChild size="lg" className="rounded-full px-10 h-16 text-lg font-bold shadow-2xl hover:shadow-primary/30 transition-all duration-500">

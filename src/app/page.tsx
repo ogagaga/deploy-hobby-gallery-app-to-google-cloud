@@ -19,23 +19,9 @@ export default async function Home() {
       {/* 作品コレクション一覧 (共通) */}
       <div className="w-full">
         <MotionItem className="hidden md:flex items-center justify-between mb-2 border-b pb-2">
-          <div className="space-y-0.5">
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-black tracking-tight tracking-tighter">
-                作品コレクション
-              </h1>
-              <Link
-                href="/welcome"
-                className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors border px-3 py-1 rounded-full bg-muted/30"
-              >
-                サイトについて
-              </Link>
-            </div>
-            {/* 作品数は WorksSection 内で動的に表示するのがベストだが、一旦コンテナだけ表示 */}
-            <p className="text-muted-foreground font-medium text-sm">
-              最新の完成品を展示しています
-            </p>
-          </div>
+          <h1 className="text-2xl font-black tracking-tight tracking-tighter">
+            作品コレクション
+          </h1>
           {session && (
             <Button asChild size="sm" className="rounded-full px-6 shadow-xl hover:shadow-primary/20 transition-all duration-300 h-10 text-sm font-bold">
               <Link href="/works/new" className="flex items-center gap-2">

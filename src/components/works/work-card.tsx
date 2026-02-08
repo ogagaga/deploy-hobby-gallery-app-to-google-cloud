@@ -33,14 +33,15 @@ export function WorkCard({ work }: WorkCardProps) {
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
             <Link href={`/works/${work.id}`} className="block group">
-                <Card className="relative overflow-hidden border-none shadow-none bg-transparent transition-all duration-500">
+                <Card className="relative overflow-hidden border-none shadow-none bg-transparent transition-all duration-500 break-inside-avoid mb-2">
                     <CardHeader className="p-0">
-                        <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/50">
+                        <div className="relative overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/50">
                             <OptimizedImage
                                 src={work.mainImage}
                                 alt={work.title}
-                                fill
-                                className="object-contain transition-transform duration-700 ease-out group-hover:scale-105"
+                                width={600}
+                                height={800}
+                                className="w-full h-auto transition-transform duration-700 ease-out group-hover:scale-105"
                                 containerClassName="w-full h-full"
                             />
 

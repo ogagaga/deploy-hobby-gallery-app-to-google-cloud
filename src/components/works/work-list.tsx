@@ -75,9 +75,9 @@ export function WorkList({ works }: WorkListProps) {
             </div>
 
             {filteredWorks.length > 0 ? (
-                <MotionContainer className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+                <MotionContainer className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-2 space-y-2">
                     {filteredWorks.map((work) => (
-                        <MotionItem key={work.id}>
+                        <MotionItem key={work.id} className="break-inside-avoid">
                             <WorkCard work={work} />
                         </MotionItem>
                     ))}

@@ -32,7 +32,7 @@ export function ProjectActions({ id }: ProjectActionsProps) {
         try {
             const result = await deleteProject(id)
             if (result.success) {
-                toast.success("プロジェクトを削除しました")
+                toast.success("シリーズを削除しました")
                 router.push("/projects")
             } else {
                 toast.error(result.error || "削除に失敗しました")
@@ -67,7 +67,7 @@ export function ProjectActions({ id }: ProjectActionsProps) {
                         </div>
                         <AlertDialogTitle className="text-2xl font-black tracking-tight text-center">本当に削除しますか？</AlertDialogTitle>
                         <AlertDialogDescription className="text-center text-base font-medium leading-relaxed">
-                            このプロジェクトを削除しても、所属する作品は削除されず、「所属なし」の状態になります。この操作は取り消せません。
+                            このシリーズを削除しても、所属する作品は削除されず、「所属なし」の状態になります。この操作は取り消せません。
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter className="mt-8 gap-4 sm:justify-center">

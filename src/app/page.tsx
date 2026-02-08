@@ -18,7 +18,7 @@ export default async function Home() {
 
       {/* 作品コレクション一覧 (共通) */}
       <div className="w-full">
-        <MotionItem className="flex items-center justify-between mb-10 border-b pb-8">
+        <MotionItem className="hidden md:flex items-center justify-between mb-10 border-b pb-8">
           <div className="space-y-1">
             <div className="flex items-center gap-4">
               <h1 className="text-4xl font-black tracking-tight tracking-tighter">

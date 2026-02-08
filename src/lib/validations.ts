@@ -90,12 +90,12 @@ export const updateWorkSchema = workSchema.extend({
     deleteImageUrls: z.array(z.string()).optional(),
     imageOrder: z.string().optional(), // JSON文字列として送られてくるため
 });
-// --- プロジェクトバリデーションスキーマ ---
+// --- シリーズバリデーションスキーマ ---
 export const projectSchema = z.object({
     name: z
         .string()
-        .min(1, "プロジェクト名を入力してください。")
-        .max(100, "プロジェクト名は100文字以内で入力してください。"),
+        .min(1, "シリーズ名を入力してください。")
+        .max(100, "シリーズ名は100文字以内で入力してください。"),
     description: z
         .string()
         .max(2000, "説明文は2000文字以内で入力してください。")
@@ -104,7 +104,7 @@ export const projectSchema = z.object({
 });
 
 export const createProjectSchema = projectSchema.extend({
-    mainImage: optionalImageFileSchema.optional(), // プロジェクトは画像無しでも可
+    mainImage: optionalImageFileSchema.optional(), // シリーズは画像無しでも可
 });
 
 export const updateProjectSchema = projectSchema.extend({

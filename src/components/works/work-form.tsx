@@ -363,7 +363,7 @@ export function WorkForm({ initialData, projects = [] }: WorkFormProps) {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="projectId" className="font-bold text-primary">所属プロジェクト（シリーズ）</Label>
+                        <Label htmlFor="projectId" className="font-bold text-primary">所属シリーズ</Label>
                         <select
                             id="projectId"
                             name="projectId"
@@ -377,7 +377,7 @@ export function WorkForm({ initialData, projects = [] }: WorkFormProps) {
                                 </option>
                             ))}
                         </select>
-                        <p className="text-[10px] text-muted-foreground ml-1">※プロジェクトを選択すると、関連作品としてまとめられます。</p>
+                        <p className="text-[10px] text-muted-foreground ml-1">※シリーズを選択すると、関連作品としてまとめられます。</p>
                         <ErrorMessage field="projectId" />
                     </div>
 

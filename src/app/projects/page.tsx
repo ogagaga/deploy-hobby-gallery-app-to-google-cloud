@@ -17,7 +17,7 @@ export default async function ProjectsPage() {
                     <div className="space-y-1">
                         <h1 className="text-4xl font-black tracking-tight tracking-tighter flex items-center gap-3">
                             <FolderOpen className="w-10 h-10 text-primary" />
-                            プロジェクト / シリーズ
+                            シリーズ
                         </h1>
                         <p className="text-muted-foreground font-medium text-sm">
                             テーマやシリーズごとにまとめられた作品集です
@@ -27,7 +27,7 @@ export default async function ProjectsPage() {
                         <Button asChild size="lg" className="rounded-full px-8 shadow-xl hover:shadow-primary/20 transition-all duration-300 h-14 text-base font-bold">
                             <Link href="/projects/new" className="flex items-center gap-2">
                                 <Plus className="w-5 h-5" />
-                                プロジェクトを作成
+                                シリーズを作成
                             </Link>
                         </Button>
                     )}
@@ -74,13 +74,13 @@ export default async function ProjectsPage() {
                 ) : (
                     <MotionItem className="border-2 border-dashed rounded-[3rem] p-24 flex flex-col items-center justify-center text-muted-foreground bg-muted/5 w-full">
                         <div className="w-20 h-20 rounded-full bg-muted/10 flex items-center justify-center mb-6 text-4xl text-foreground">📁</div>
-                        <p className="text-2xl font-bold text-foreground mb-2">まだプロジェクトがありません</p>
+                        <p className="text-2xl font-bold text-foreground mb-2">まだシリーズがありません</p>
                         <p className="text-muted-foreground text-center max-w-sm">
                             「MG ジム・バリエーション」などのテーマを作成して、作品をグループ化しましょう。
                         </p>
                         {session?.user?.email === process.env.ADMIN_EMAIL && (
                             <Button asChild variant="outline" className="mt-8 rounded-full h-12 px-8">
-                                <Link href="/projects/new">最初のプロジェクトを作成</Link>
+                                <Link href="/projects/new">最初のシリーズを作成</Link>
                             </Button>
                         )}
                     </MotionItem>

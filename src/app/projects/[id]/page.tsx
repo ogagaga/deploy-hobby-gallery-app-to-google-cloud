@@ -35,7 +35,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                             <span className="bg-muted p-1.5 rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                                 <ArrowLeft className="w-4 h-4" />
                             </span>
-                            <span className="font-bold text-sm">プロジェクト一覧へ戻る</span>
+                            <span className="font-bold text-sm">シリーズ一覧へ戻る</span>
                         </Link>
                     </Button>
 
@@ -61,7 +61,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                                     </h1>
                                     <div className="flex items-center gap-3">
                                         <span className="bg-primary text-primary-foreground text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg shadow-primary/20">
-                                            Project Collection
+                                            Series Collection
                                         </span>
                                         <span className="text-muted-foreground font-bold text-sm">
                                             {project.works.length} Works
@@ -89,7 +89,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
                 {project.works.length === 0 && (
                     <MotionItem className="text-center py-20 border-2 border-dashed rounded-[3rem] bg-muted/5">
-                        <p className="text-muted-foreground font-bold">このプロジェクトにはまだ作品が登録されていません</p>
+                        <p className="text-muted-foreground font-bold">このシリーズにはまだ作品が登録されていません</p>
                     </MotionItem>
                 )}
             </MotionContainer>

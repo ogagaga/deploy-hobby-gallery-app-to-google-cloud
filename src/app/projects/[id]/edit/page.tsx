@@ -36,7 +36,7 @@ export default async function EditProjectPage({ params }: EditProjectPageProps) 
                         <Edit3 className="w-10 h-10" />
                     </div>
                     <h1 className="text-4xl font-black tracking-tight tracking-tighter">
-                        プロジェクト情報の編集
+                        シリーズ情報の編集
                     </h1>
                     <p className="text-muted-foreground font-medium">
                         シリーズ名や説明文、カバー画像を変更できます

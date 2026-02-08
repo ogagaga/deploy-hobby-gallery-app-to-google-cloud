@@ -92,7 +92,7 @@ export async function updateProject(id: string, formData: FormData) {
         })
 
         if (!existingProject) {
-            return { success: false, error: "プロジェクトが見つかりません。" }
+            return { success: false, error: "シリーズが見つかりません。" }
         }
 
         let mainImageUrl = existingProject.mainImage

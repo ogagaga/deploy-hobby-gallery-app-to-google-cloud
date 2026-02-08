@@ -79,7 +79,7 @@ export function InfiniteWorkList({
             {/* フィルターセクション */}
             <div className="flex flex-col md:flex-row gap-6 items-end justify-between bg-white/40 dark:bg-zinc-900/40 p-8 rounded-[2.5rem] glass border-none shadow-sm">
                 <div className="w-full md:max-w-md space-y-3">
-                    <label className="text-sm font-black uppercase tracking-widest opacity-60 ml-1">Search Works</label>
+                    <label className="text-sm font-black uppercase tracking-widest opacity-60 ml-1">Search</label>
                     <div className="relative group">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                         <Input

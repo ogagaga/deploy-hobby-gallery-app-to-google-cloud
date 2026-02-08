@@ -45,7 +45,7 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                 : await createProject(formData)
 
             if (result.success) {
-                toast.success(isEdit ? "プロジェクトを更新しました" : "プロジェクトを作成しました")
+                toast.success(isEdit ? "シリーズを更新しました" : "シリーズを作成しました")
                 router.push(`/projects/${result.id}`)
             } else {
                 if (result.details) {
@@ -74,7 +74,7 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
             <Card className="border-none shadow-2xl rounded-[3rem] overflow-hidden bg-white dark:bg-zinc-900 ring-1 ring-inset ring-foreground/5">
                 <CardContent className="p-10 space-y-8">
                     <div className="space-y-2">
-                        <Label htmlFor="name" className="text-lg font-bold">プロジェクト名</Label>
+                        <Label htmlFor="name" className="text-lg font-bold">シリーズ名</Label>
                         <Input
                             id="name"
                             name="name"
@@ -86,7 +86,7 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="description" className="text-lg font-bold">プロジェクトの説明</Label>
+                        <Label htmlFor="description" className="text-lg font-bold">シリーズの説明</Label>
                         <Textarea
                             id="description"
                             name="description"

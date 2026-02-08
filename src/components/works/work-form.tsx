@@ -28,6 +28,7 @@ interface WorkFormProps {
         tags: { name: string }[]
         images: { id: string, url: string }[]
         projectId?: string | null
+        endDate?: Date | string | null
     }
     projects?: any[] // Project[] だが、簡易化のため any[]
 }
@@ -360,6 +361,18 @@ export function WorkForm({ initialData, projects = [] }: WorkFormProps) {
                             <Input id="genre" name="genre" placeholder="キャラクターモデル" defaultValue={initialData?.genre || ""} />
                             <ErrorMessage field="genre" />
                         </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="endDate" className="font-bold">完成日</Label>
+                        <Input
+                            id="endDate"
+                            name="endDate"
+                            type="date"
+                            defaultValue={initialData?.endDate ? new Date(initialData.endDate).toISOString().split('T')[0] : ""}
+                            className="h-12 w-full rounded-2xl border-input px-4 py-2"
+                        />
+                        <ErrorMessage field="endDate" />
                     </div>
 
                     <div className="space-y-2">

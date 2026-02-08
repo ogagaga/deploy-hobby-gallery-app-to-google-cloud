@@ -30,6 +30,7 @@ export async function createWork(formData: FormData) {
             description: formData.get("description"),
             tags: formData.get("tags"),
             projectId: formData.get("projectId"), // 追加
+            endDate: formData.get("endDate"), // 追加
             mainImage: formData.get("mainImage"),
             subImages: formData.getAll("subImages"),
         }
@@ -76,6 +77,7 @@ export async function createWork(formData: FormData) {
                 description: data.description,
                 mainImage: mainImageUrl,
                 projectId: data.projectId || null, // 追加
+                endDate: data.endDate ? new Date(data.endDate) : null, // 追加
                 images: {
                     create: subImageUrls.map((url, index) => ({
                         url,
@@ -113,6 +115,7 @@ export async function updateWork(id: string, formData: FormData) {
             description: formData.get("description"),
             tags: formData.get("tags"),
             projectId: formData.get("projectId"), // 追加
+            endDate: formData.get("endDate"), // 追加
             mainImage: formData.get("mainImage"),
             deleteImageUrls: formData.getAll("deleteImageUrls"),
             imageOrder: formData.get("imageOrder"),
@@ -165,6 +168,7 @@ export async function updateWork(id: string, formData: FormData) {
                     description: data.description || null,
                     mainImage: mainImageUrl,
                     projectId: data.projectId || null, // 追加
+                    endDate: data.endDate ? new Date(data.endDate) : null, // 追加
                     tags: {
                         set: [],
                         connectOrCreate: tagNames.map(name => ({

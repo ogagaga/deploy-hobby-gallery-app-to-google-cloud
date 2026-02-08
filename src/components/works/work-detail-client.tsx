@@ -3,7 +3,7 @@
 import { OptimizedImage } from "@/components/ui/optimized-image"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ChevronLeft, Package, Ruler, Palette, Edit3, Heart } from "lucide-react"
+import { ChevronLeft, Package, Ruler, Palette, Edit3, Heart, Calendar } from "lucide-react"
 import Link from "next/link"
 import { Image as PrismaImage, Tag, Work } from "@prisma/client"
 import { DeleteButton } from "@/components/works/delete-button"
@@ -174,6 +174,27 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                                 <p className="text-sm font-bold">{work.scale || "---"}</p>
                             </div>
                         </div>
+
+                        {work.endDate && (
+                            <div className="flex items-center gap-3 p-2 rounded-lg bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--dark-muted)]/5">
+                                <div
+                                    className="w-8 h-8 rounded flex items-center justify-center shrink-0 transition-colors duration-500"
+                                    style={{ backgroundColor: "var(--dark-muted)", color: "white" }}
+                                >
+                                    <Calendar className="w-4 h-4" />
+                                </div>
+                                <div>
+                                    <p className="font-black text-muted-foreground uppercase text-[8px] tracking-widest mb-0.5 opacity-60">COMPLETED</p>
+                                    <p className="text-sm font-bold">
+                                        {new Date(work.endDate).toLocaleDateString('ja-JP', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit'
+                                        })}
+                                    </p>
+                                </div>
+                            </div>
+                        )}
 
                         {work.paints && (
                             <div className="sm:col-span-3 xl:col-span-1 flex items-start gap-3 p-2 rounded-lg bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--muted)]/5">

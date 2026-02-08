@@ -76,6 +76,10 @@ export const workSchema = z.object({
         .string()
         .optional()
         .or(z.literal("")),
+    endDate: z
+        .string()
+        .optional()
+        .or(z.literal("")),
 });
 
 // 新規作成用（必須フィールド込み）

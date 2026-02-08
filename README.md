@@ -16,6 +16,18 @@
 - **Infrastructure**: [Google Cloud Run](https://cloud.google.com/run), [Cloud SQL](https://cloud.google.com/sql)
 - **CI/CD**: [Google Cloud Build](https://cloud.google.com/build)
 
+## 🌿 ブランチ戦略
+
+このプロジェクトでは、安定したデプロイとスムーズな開発を両立させるため、以下のブランチ運用を採用しています。
+
+- **`develop` ブランチ**: 
+    - ローカルでの開発および動作検証用のメインブランチです。
+    - 日常的な開発作業はこのブランチ（またはそこから作成したフィーチャーブランチ）で実施します。
+- **`main` ブランチ**:
+    - 本番（Google Cloud）環境用のブランチです。
+    - `develop` での検証が完了し、本番へ反映する準備が整ったコードのみをマージします。
+    - `main` ブランチの内容が最新の本番環境の状態を反映します。
+
 ## 📖 ドキュメント
 
 開発や運用に役立つ詳細なドキュメントは `docs/` ディレクトリに格納されています。

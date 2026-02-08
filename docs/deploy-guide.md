@@ -7,11 +7,21 @@
 - Google Cloud SDK (`gcloud`) がインストールされ、認証が完了していること。
 - 対象プロジェクトへの適切なアクセス権限があること。
 
-## 2. デプロイフロー (自動化)
+## 2. デプロイフロー
+
+本プロジェクトでは、**`main` ブランチにマージされたコードのみを本番環境へデプロイ**します。開発および検証は `develop` ブランチで行い、リリース準備が整った段階で `main` へマージしてください。
+
+### デプロイの実行
 
 リポジトリのルートディレクトリにある `cloudbuild.yaml` を使用して、ビルド、デプロイ、マイグレーションを単一コマンドで実行します。
 
 ```bash
+# 1. develop から main へマージ（ローカルまたはプルリクエスト）
+git checkout main
+git merge develop
+git push origin main
+
+# 2. デプロイコマンドの実行（main ブランチから実行することを推奨）
 gcloud builds submit --config cloudbuild.yaml .
 ```
 

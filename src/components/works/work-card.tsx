@@ -40,7 +40,7 @@ export function WorkCard({ work }: WorkCardProps) {
                                 src={work.mainImage}
                                 alt={work.title}
                                 fill
-                                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                                className="object-contain transition-transform duration-700 ease-out group-hover:scale-105"
                                 containerClassName="w-full h-full"
                             />
 

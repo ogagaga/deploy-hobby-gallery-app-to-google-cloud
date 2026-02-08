@@ -288,6 +288,9 @@ export async function getWorks(page: number = 1, limit: number = 8) {
             },
             include: {
                 tags: true,
+                images: {
+                    select: { id: true }
+                },
                 project: {
                     select: { name: true }
                 }

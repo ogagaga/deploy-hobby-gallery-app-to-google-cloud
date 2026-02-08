@@ -11,7 +11,11 @@ import { useInView } from "react-intersection-observer"
 import { getWorks } from "@/app/actions/work"
 
 interface InfiniteWorkListProps {
-    initialWorks: (Work & { tags: Tag[] })[]
+    initialWorks: (Work & {
+        tags: Tag[],
+        images: { id: string }[],
+        project: { name: string } | null
+    })[]
     initialHasMore: boolean
     initialTotal: number
 }
@@ -118,7 +122,7 @@ export function InfiniteWorkList({
             {/* リスト表示 */}
             {filteredWorks.length > 0 ? (
                 <>
-                    <MotionContainer className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                    <MotionContainer className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                         {filteredWorks.map((work) => (
                             <MotionItem key={work.id}>
                                 <WorkCard work={work} />

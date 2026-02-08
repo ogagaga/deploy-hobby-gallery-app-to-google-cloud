@@ -17,7 +17,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         include: {
             works: {
                 orderBy: { createdAt: "desc" },
-                include: { tags: true }
+                include: {
+                    tags: true,
+                    images: { select: { id: true } }
+                }
             }
         }
     })
@@ -73,7 +76,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     </div>
                 </MotionItem>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                     {project.works.map((work: any) => (
                         <MotionItem key={work.id}>
                             <WorkCard work={work} />

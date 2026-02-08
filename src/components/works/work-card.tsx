@@ -25,13 +25,13 @@ export function WorkCard({ work }: WorkCardProps) {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            whileHover={{ y: -8 }}
+            whileHover={{ y: -4 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
             <Link href={`/works/${work.id}`} className="block group">
-                <Card className="relative overflow-hidden border-none shadow-sm premium-shadow-hover rounded-3xl bg-white dark:bg-zinc-900 ring-1 ring-inset ring-foreground/5 hover:ring-primary/20 transition-all duration-500">
+                <Card className="relative overflow-hidden border-none shadow-sm premium-shadow-hover rounded-2xl bg-white dark:bg-zinc-900 ring-1 ring-inset ring-foreground/5 hover:ring-primary/20 transition-all duration-500">
                     {/* Shine Effect */}
-                    <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden rounded-3xl">
+                    <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden rounded-2xl">
                         <motion.div
                             className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-200%]"
                             variants={{
@@ -72,9 +72,9 @@ export function WorkCard({ work }: WorkCardProps) {
                             </div>
 
                             {/* Hover Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 flex items-end p-8">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 flex items-end p-4">
                                 <motion.p
-                                    className="text-white text-sm font-bold tracking-tight"
+                                    className="text-white text-[10px] font-bold tracking-tight"
                                     initial={{ opacity: 0, y: 10 }}
                                     whileHover={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.3 }}
@@ -84,28 +84,28 @@ export function WorkCard({ work }: WorkCardProps) {
                             </div>
                         </div>
                     </CardHeader>
-                    <CardContent className="p-6">
-                        <div className="space-y-4">
-                            <div className="space-y-1">
-                                <CardTitle className="text-xl font-black tracking-tight line-clamp-1 group-hover:text-primary transition-colors duration-300">
+                    <CardContent className="p-3">
+                        <div className="space-y-2">
+                            <div className="space-y-0.5">
+                                <CardTitle className="text-sm font-black tracking-tight line-clamp-1 group-hover:text-primary transition-colors duration-300">
                                     {work.title}
                                 </CardTitle>
                                 {work.kitName && (
-                                    <p className="text-sm text-muted-foreground line-clamp-1 font-medium italic opacity-80">
+                                    <p className="text-[10px] text-muted-foreground line-clamp-1 font-medium italic opacity-80">
                                         {work.kitName} {work.maker && `— ${work.maker}`}
                                     </p>
                                 )}
                             </div>
 
-                            <div className="flex flex-wrap gap-2">
-                                {work.tags.slice(0, 3).map((tag, idx) => (
-                                    <span key={idx} className="text-[10px] font-bold text-primary/60 bg-primary/5 px-2 py-0.5 rounded-full uppercase tracking-widest">
+                            <div className="flex flex-wrap gap-1">
+                                {work.tags.slice(0, 2).map((tag, idx) => (
+                                    <span key={idx} className="text-[9px] font-bold text-primary/60 bg-primary/5 px-1.5 py-0.5 rounded-full uppercase tracking-widest">
                                         {tag.name}
                                     </span>
                                 ))}
-                                {work.tags.length > 3 && (
-                                    <span className="text-[10px] font-bold text-muted-foreground/40 px-2 py-0.5 uppercase tracking-widest">
-                                        +{work.tags.length - 3}
+                                {work.tags.length > 2 && (
+                                    <span className="text-[9px] font-bold text-muted-foreground/40 px-1.5 py-0.5 uppercase tracking-widest">
+                                        +{work.tags.length - 2}
                                     </span>
                                 )}
                             </div>

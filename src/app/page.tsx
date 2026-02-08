@@ -13,15 +13,15 @@ export default async function Home() {
   const session = await auth();
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-6 py-4">
+    <div className="flex flex-col items-center justify-center space-y-3 py-2">
       <WelcomePopup userName={session?.user?.name} />
 
       {/* 作品コレクション一覧 (共通) */}
       <div className="w-full">
-        <MotionItem className="hidden md:flex items-center justify-between mb-4 border-b pb-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-4">
-              <h1 className="text-4xl font-black tracking-tight tracking-tighter">
+        <MotionItem className="hidden md:flex items-center justify-between mb-2 border-b pb-2">
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl font-black tracking-tight tracking-tighter">
                 作品コレクション
               </h1>
               <Link
@@ -37,10 +37,10 @@ export default async function Home() {
             </p>
           </div>
           {session && (
-            <Button asChild size="lg" className="rounded-full px-8 shadow-xl hover:shadow-primary/20 transition-all duration-300 h-12 text-base font-bold">
+            <Button asChild size="sm" className="rounded-full px-6 shadow-xl hover:shadow-primary/20 transition-all duration-300 h-10 text-sm font-bold">
               <Link href="/works/new" className="flex items-center gap-2">
-                <Plus className="w-5 h-5" />
-                作品を投稿
+                <Plus className="w-4 h-4" />
+                投稿
               </Link>
             </Button>
           )}

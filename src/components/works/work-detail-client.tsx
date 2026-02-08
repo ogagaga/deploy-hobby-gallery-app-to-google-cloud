@@ -39,7 +39,7 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
 
     return (
         <MotionContainer
-            className="max-w-6xl mx-auto py-6 px-4 sm:px-6 lg:px-8 relative"
+            className="max-w-6xl mx-auto py-3 px-4 sm:px-6 lg:px-8 relative"
             style={dynamicStyles}
         >
             {/* Dynamic Background Glow */}
@@ -53,7 +53,7 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                     style={{ backgroundColor: "var(--vibrant)" }}
                 />
             </div>
-            <MotionItem className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <MotionItem className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                 <Button asChild variant="ghost" className="hover:bg-accent/50 p-0 pr-4 flex items-center gap-2 w-fit rounded-full transition-all">
                     <Link href="/">
                         <div className="w-8 h-8 rounded-full bg-background border flex items-center justify-center shadow-sm">
@@ -76,12 +76,12 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                 )}
             </MotionItem>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                 {/* 左カラム: 画像セクション (7/12) */}
-                <div className="lg:col-span-7 space-y-6">
+                <div className="lg:col-span-12 xl:col-span-8 space-y-4">
                     <MotionItem
                         layoutId="main-image"
-                        className="relative aspect-square w-full rounded-[2.5rem] overflow-hidden bg-white dark:bg-zinc-900 border shadow-2xl shadow-zinc-200/50 dark:shadow-none ring-1 ring-zinc-200/50 dark:ring-zinc-800 cursor-zoom-in"
+                        className="relative aspect-video w-full rounded-2xl overflow-hidden bg-white dark:bg-zinc-900 border shadow-lg shadow-zinc-200/50 dark:shadow-none ring-1 ring-zinc-200/50 dark:ring-zinc-800 cursor-zoom-in"
                     >
                         <OptimizedImage
                             src={work.mainImage}
@@ -95,12 +95,12 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                     </MotionItem>
 
                     {work.images.length > 0 && (
-                        <div className="grid grid-cols-4 gap-4">
+                        <div className="grid grid-cols-6 gap-2">
                             {work.images.map((img: PrismaImage, idx: number) => (
                                 <MotionItem
                                     key={img.id}
                                     layoutId={`sub-image-${idx}`}
-                                    className="relative aspect-square rounded-3xl overflow-hidden border bg-white dark:bg-zinc-900 ring-1 ring-zinc-200/50 dark:ring-zinc-800 group cursor-zoom-in shadow-sm hover:shadow-md transition-all"
+                                    className="relative aspect-square rounded-lg overflow-hidden border bg-white dark:bg-zinc-900 ring-1 ring-zinc-200/50 dark:ring-zinc-800 group cursor-zoom-in shadow-sm hover:shadow-md transition-all"
                                 >
                                     <OptimizedImage
                                         src={img.url}
@@ -118,10 +118,10 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                 </div>
 
                 {/* 右カラム: 詳細情報セクション (5/12) */}
-                <div className="lg:col-span-5 space-y-6">
-                    <MotionItem className="space-y-6">
-                        <div className="space-y-2">
-                            <h1 className="text-5xl font-black tracking-tight text-foreground leading-[1.1] tracking-tighter">
+                <div className="lg:col-span-12 xl:col-span-4 space-y-4">
+                    <MotionItem className="space-y-2">
+                        <div className="space-y-0.5">
+                            <h1 className="text-3xl font-black tracking-tight text-foreground leading-tight tracking-tighter">
                                 {work.title}
                             </h1>
                         </div>
@@ -145,68 +145,68 @@ export function WorkDetailClient({ work, isAdmin }: WorkDetailClientProps) {
                         </div>
                     </MotionItem>
 
-                    <MotionItem className="grid grid-cols-1 gap-3">
-                        <div className="flex items-center gap-4 p-3 rounded-[1.5rem] bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--light-vibrant)]/5">
+                    <MotionItem className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-1 gap-2">
+                        <div className="flex items-center gap-3 p-2 rounded-lg bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--light-vibrant)]/5">
                             <div
-                                className="w-12 h-12 rounded-2xl flex items-center justify-center transition-colors duration-500"
+                                className="w-8 h-8 rounded flex items-center justify-center shrink-0 transition-colors duration-500"
                                 style={{ backgroundColor: "var(--light-vibrant)", opacity: 0.8, color: "white" }}
                             >
-                                <Package className="w-6 h-6" />
+                                <Package className="w-4 h-4" />
                             </div>
                             <div className="min-w-0">
-                                <p className="font-black text-muted-foreground uppercase text-[10px] tracking-widest mb-1 opacity-60">KIT INFO</p>
-                                <p className="text-lg font-bold truncate">
+                                <p className="font-black text-muted-foreground uppercase text-[8px] tracking-widest mb-0.5 opacity-60">KIT INFO</p>
+                                <p className="text-sm font-bold truncate">
                                     {work.kitName || "---"}
-                                    {work.maker && <span className="ml-2 text-muted-foreground font-medium text-base">({work.maker})</span>}
+                                    {work.maker && <span className="ml-1 text-muted-foreground font-medium text-xs">({work.maker})</span>}
                                 </p>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-4 p-3 rounded-[1.5rem] bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--vibrant)]/5">
+                        <div className="flex items-center gap-3 p-2 rounded-lg bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--vibrant)]/5">
                             <div
-                                className="w-12 h-12 rounded-2xl flex items-center justify-center transition-colors duration-500"
+                                className="w-8 h-8 rounded flex items-center justify-center shrink-0 transition-colors duration-500"
                                 style={{ backgroundColor: "var(--vibrant)", color: "white" }}
                             >
-                                <Ruler className="w-6 h-6" />
+                                <Ruler className="w-4 h-4" />
                             </div>
                             <div>
-                                <p className="font-black text-muted-foreground uppercase text-[10px] tracking-widest mb-1 opacity-60">SCALE</p>
-                                <p className="text-lg font-bold">{work.scale || "---"}</p>
+                                <p className="font-black text-muted-foreground uppercase text-[8px] tracking-widest mb-0.5 opacity-60">SCALE</p>
+                                <p className="text-sm font-bold">{work.scale || "---"}</p>
                             </div>
                         </div>
 
                         {work.paints && (
-                            <div className="flex items-start gap-4 p-3 rounded-[1.5rem] bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--muted)]/5">
+                            <div className="sm:col-span-3 xl:col-span-1 flex items-start gap-3 p-2 rounded-lg bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-100 dark:border-zinc-800 ring-1 ring-zinc-200/50 dark:ring-zinc-800 transition-all duration-500 hover:shadow-lg hover:shadow-[var(--muted)]/5">
                                 <div
-                                    className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-colors duration-500"
+                                    className="w-8 h-8 rounded flex items-center justify-center shrink-0 transition-colors duration-500"
                                     style={{ backgroundColor: "var(--muted)", color: "white" }}
                                 >
-                                    <Palette className="w-6 h-6" />
+                                    <Palette className="w-4 h-4" />
                                 </div>
                                 <div className="min-w-0">
-                                    <p className="font-black text-muted-foreground uppercase text-[10px] tracking-widest mb-1 opacity-60">PAINTS</p>
-                                    <p className="text-base font-medium whitespace-pre-wrap leading-relaxed">{work.paints}</p>
+                                    <p className="font-black text-muted-foreground uppercase text-[8px] tracking-widest mb-0.5 opacity-60">PAINTS</p>
+                                    <p className="text-xs font-medium whitespace-pre-wrap leading-relaxed line-clamp-2">{work.paints}</p>
                                 </div>
                             </div>
                         )}
                     </MotionItem>
 
                     <MotionItem className="space-y-4">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
                             <div
-                                className="w-1.5 h-8 rounded-full shadow-lg transition-colors duration-500"
+                                className="w-1 h-5 rounded-full shadow-lg transition-colors duration-500"
                                 style={{
                                     backgroundColor: "var(--vibrant)",
-                                    boxShadow: "0 0 20px var(--vibrant)"
+                                    boxShadow: "0 0 10px var(--vibrant)"
                                 }}
                             />
-                            <h3 className="text-2xl font-black tracking-tight tracking-tighter">DESIGN NOTES</h3>
+                            <h3 className="text-lg font-black tracking-tight tracking-tighter">DESIGN NOTES</h3>
                         </div>
                         <div className="relative">
-                            <div className="absolute -left-4 top-0 bottom-0 w-px bg-zinc-100 dark:bg-zinc-800" />
+                            <div className="absolute -left-2 top-0 bottom-0 w-px bg-zinc-100 dark:bg-zinc-800" />
                             <MarkdownRenderer
                                 content={work.description || "説明はありません。"}
-                                className="text-xl leading-relaxed"
+                                className="text-sm leading-relaxed"
                             />
                         </div>
                     </MotionItem>

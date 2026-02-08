@@ -11,12 +11,12 @@ export default async function ProjectsPage() {
     const projects = await getProjects()
 
     return (
-        <div className="container mx-auto py-4 px-4">
-            <MotionContainer className="space-y-6">
-                <MotionItem className="flex items-center justify-between border-b pb-4">
-                    <div className="space-y-1">
-                        <h1 className="text-4xl font-black tracking-tight tracking-tighter flex items-center gap-3">
-                            <FolderOpen className="w-10 h-10 text-primary" />
+        <div className="container mx-auto py-3 px-4">
+            <MotionContainer className="space-y-4">
+                <MotionItem className="flex items-center justify-between border-b pb-2">
+                    <div className="space-y-0.5">
+                        <h1 className="text-2xl font-black tracking-tight tracking-tighter flex items-center gap-2">
+                            <FolderOpen className="w-8 h-8 text-primary" />
                             シリーズ
                         </h1>
                         <p className="text-muted-foreground font-medium text-sm">
@@ -24,21 +24,21 @@ export default async function ProjectsPage() {
                         </p>
                     </div>
                     {session?.user?.email === process.env.ADMIN_EMAIL && (
-                        <Button asChild size="lg" className="rounded-full px-8 shadow-xl hover:shadow-primary/20 transition-all duration-300 h-12 text-base font-bold">
+                        <Button asChild size="sm" className="rounded-full px-6 shadow-xl hover:shadow-primary/20 transition-all duration-300 h-10 text-sm font-bold">
                             <Link href="/projects/new" className="flex items-center gap-2">
-                                <Plus className="w-5 h-5" />
-                                シリーズを作成
+                                <Plus className="w-4 h-4" />
+                                作成
                             </Link>
                         </Button>
                     )}
                 </MotionItem>
 
                 {projects.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                         {projects.map((project: any) => (
                             <MotionItem key={project.id}>
                                 <Link href={`/projects/${project.id}`}>
-                                    <Card className="group relative overflow-hidden border-none shadow-sm rounded-[2.5rem] bg-white dark:bg-zinc-900 ring-1 ring-inset ring-foreground/5 hover:ring-primary/20 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-2">
+                                    <Card className="group relative overflow-hidden border-none shadow-sm premium-shadow-hover rounded-2xl bg-white dark:bg-zinc-900 ring-1 ring-inset ring-foreground/5 hover:ring-primary/20 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-1">
                                         <CardHeader className="p-0 aspect-[16/9] bg-muted/20 relative overflow-hidden">
                                             {project.mainImage ? (
                                                 <img
@@ -53,9 +53,9 @@ export default async function ProjectsPage() {
                                             )}
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                                         </CardHeader>
-                                        <CardContent className="p-8">
-                                            <div className="flex justify-between items-start mb-4">
-                                                <h2 className="text-2xl font-black tracking-tight">{project.name}</h2>
+                                        <CardContent className="p-4">
+                                            <div className="flex justify-between items-start mb-2">
+                                                <h2 className="text-lg font-black tracking-tight line-clamp-1">{project.name}</h2>
                                                 <span className="bg-primary/10 text-primary text-xs font-bold px-3 py-1 rounded-full border border-primary/20">
                                                     {project._count.works} Works
                                                 </span>

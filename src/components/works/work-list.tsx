@@ -35,27 +35,27 @@ export function WorkList({ works }: WorkListProps) {
     }, [works, searchQuery, selectedGenre])
 
     return (
-        <div className="space-y-6">
-            <div className="flex flex-col md:flex-row gap-4 items-end justify-between bg-white/40 dark:bg-zinc-900/40 p-4 md:p-6 rounded-[2rem] glass border-none shadow-sm">
-                <div className="w-full md:max-w-md space-y-3">
-                    <label className="text-sm font-black uppercase tracking-widest opacity-60 ml-1">Search</label>
+        <div className="space-y-4">
+            <div className="flex flex-col md:flex-row gap-4 items-end justify-between bg-white/40 dark:bg-zinc-900/40 p-2 rounded-xl glass border-none shadow-sm">
+                <div className="w-full md:max-w-xs space-y-1">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-60 ml-0.5">Search</label>
                     <div className="relative group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                         <Input
                             placeholder="タイトル、タグ、キット名で検索..."
-                            className="pl-12 h-12 rounded-xl bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 focus:ring-primary/20 transition-all text-base shadow-inner"
+                            className="pl-9 h-10 rounded-lg bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 focus:ring-primary/20 transition-all text-sm shadow-inner"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                 </div>
 
-                <div className="w-full md:w-auto space-y-3">
-                    <label className="text-sm font-black uppercase tracking-widest opacity-60 ml-1 text-right block md:hidden lg:block">ジャンル</label>
-                    <div className="flex flex-wrap gap-2 justify-end">
+                <div className="w-full md:w-auto space-y-1">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-60 ml-0.5 text-right block md:hidden lg:block">ジャンル</label>
+                    <div className="flex flex-wrap gap-1 justify-end">
                         <Badge
                             variant={selectedGenre === null ? "default" : "outline"}
-                            className="px-4 py-2 rounded-full cursor-pointer hover:scale-105 transition-transform font-bold"
+                            className="px-2.5 py-0.5 rounded-full cursor-pointer hover:scale-105 transition-transform font-bold text-[9px]"
                             onClick={() => setSelectedGenre(null)}
                         >
                             すべて
@@ -64,7 +64,7 @@ export function WorkList({ works }: WorkListProps) {
                             <Badge
                                 key={genre}
                                 variant={selectedGenre === genre ? "default" : "outline"}
-                                className="px-4 py-2 rounded-full cursor-pointer hover:scale-105 transition-transform font-bold"
+                                className="px-3 py-1 rounded-full cursor-pointer hover:scale-105 transition-transform font-bold text-[10px]"
                                 onClick={() => setSelectedGenre(genre)}
                             >
                                 {genre}
@@ -75,7 +75,7 @@ export function WorkList({ works }: WorkListProps) {
             </div>
 
             {filteredWorks.length > 0 ? (
-                <MotionContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                <MotionContainer className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
                     {filteredWorks.map((work) => (
                         <MotionItem key={work.id}>
                             <WorkCard work={work} />

@@ -27,9 +27,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     }
 
     return (
-        <div className="container mx-auto py-4 px-4">
-            <MotionContainer className="space-y-6">
-                <MotionItem className="space-y-4">
+        <div className="container mx-auto py-3 px-4">
+            <MotionContainer className="space-y-4">
+                <MotionItem className="space-y-2">
                     <Button asChild variant="ghost" className="rounded-full pl-2 pr-6 h-10 group">
                         <Link href="/projects" className="flex items-center gap-2">
                             <span className="bg-muted p-1.5 rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
@@ -39,8 +39,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                         </Link>
                     </Button>
 
-                    <div className="flex flex-col md:flex-row gap-10 items-start border-b pb-6">
-                        <div className="w-full md:w-1/3 aspect-[4/3] rounded-[3rem] overflow-hidden bg-muted/20 relative">
+                    <div className="flex flex-col md:flex-row gap-4 items-start border-b pb-4">
+                        <div className="w-full md:w-1/4 aspect-[4/3] rounded-2xl overflow-hidden bg-muted/20 relative">
                             {project.mainImage ? (
                                 <img
                                     src={project.mainImage}
@@ -53,19 +53,13 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                                 </div>
                             )}
                         </div>
-                        <div className="flex-1 space-y-6 w-full">
+                        <div className="flex-1 space-y-2">
                             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-                                <div className="space-y-4">
-                                    <h1 className="text-5xl font-black tracking-tight tracking-tighter leading-none">
-                                        {project.name}
-                                    </h1>
-                                    <div className="flex items-center gap-3">
-                                        <span className="bg-primary text-primary-foreground text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg shadow-primary/20">
-                                            Series Collection
-                                        </span>
-                                        <span className="text-muted-foreground font-bold text-sm">
-                                            {project.works.length} Works
-                                        </span>
+                                <div className="space-y-0.5">
+                                    <h1 className="text-3xl font-black tracking-tight tracking-tighter">{project.name}</h1>
+                                    <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest opacity-80">
+                                        <LayoutGrid className="w-3 h-3" />
+                                        {project.works.length} works in this series
                                     </div>
                                 </div>
                                 {isAdmin && <ProjectActions id={project.id} />}

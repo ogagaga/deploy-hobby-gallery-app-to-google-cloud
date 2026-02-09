@@ -18,6 +18,7 @@ interface WorkCardProps {
         images?: { id: string }[]
         tags: { name: string }[]
         project?: { name: string } | null
+        endDate?: Date | string | null
     }
 }
 
@@ -71,6 +72,21 @@ export function WorkCard({ work }: WorkCardProps) {
                             <h3 className="text-xl font-black tracking-tight line-clamp-1 group-hover:text-primary transition-colors duration-300">
                                 {work.title}
                             </h3>
+                            {work.endDate && (
+                                <div className="flex items-center gap-1 text-[10px] font-bold text-muted-foreground/60 uppercase tracking-tighter">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-3 h-3" strokeLinecap="round" strokeLinejoin="round">
+                                        <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                                        <path d="M16 2v4M8 2v4M3 10h18" />
+                                    </svg>
+                                    <span>
+                                        {new Date(work.endDate).toLocaleDateString('ja-JP', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit'
+                                        })}
+                                    </span>
+                                </div>
+                            )}
                             {work.description ? (
                                 <p className="text-sm text-muted-foreground line-clamp-2 font-medium leading-relaxed opacity-90">
                                     {work.description}

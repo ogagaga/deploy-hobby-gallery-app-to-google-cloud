@@ -88,20 +88,16 @@ export function HeaderClient({ session }: HeaderProps) {
                         <div className="hidden sm:block">
                             <ThemeToggle />
                         </div>
-                        <div className="hidden sm:flex items-center gap-4">
-                            {session ? (
-                                <>
-                                    <div className="flex flex-col items-end">
-                                        <span className="text-sm font-bold leading-none">{session.user?.name}</span>
-                                        <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-black opacity-50">{session.user?.email}</span>
-                                    </div>
-                                    <div className="w-px h-8 bg-zinc-200 dark:bg-zinc-800" />
-                                    <SignOutButton />
-                                </>
-                            ) : (
-                                <SignInButton />
-                            )}
-                        </div>
+                        {session && (
+                            <>
+                                <div className="flex flex-col items-end">
+                                    <span className="text-sm font-bold leading-none">{session.user?.name}</span>
+                                    <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-black opacity-50">{session.user?.email}</span>
+                                </div>
+                                <div className="w-px h-8 bg-zinc-200 dark:bg-zinc-800" />
+                                <SignOutButton />
+                            </>
+                        )}
 
                         {/* Mobile Menu Button */}
                         <button
@@ -205,17 +201,13 @@ export function HeaderClient({ session }: HeaderProps) {
                                     <ThemeToggle />
                                 </div>
 
-                                {session ? (
+                                {session && (
                                     <div className="space-y-4">
                                         <div className="flex flex-col">
                                             <span className="text-lg font-black">{session.user?.name}</span>
                                             <span className="text-xs text-muted-foreground break-all">{session.user?.email}</span>
                                         </div>
                                         <SignOutButton />
-                                    </div>
-                                ) : (
-                                    <div className="pt-4">
-                                        <SignInButton />
                                     </div>
                                 )}
                             </div>

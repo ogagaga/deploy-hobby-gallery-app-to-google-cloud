@@ -62,7 +62,7 @@ export default function NotFound() {
 
                 <div className="pt-12">
                     <p className="text-xs font-black uppercase tracking-[0.2em] opacity-20">
-                        Oga&apos;s Plastic Model Gallery Collection
+                        Oga&apos;s Plastic Model Gallery <Link href="/login" className="hover:opacity-100 transition-opacity">Collection</Link>
                     </p>
                 </div>
             </motion.div>

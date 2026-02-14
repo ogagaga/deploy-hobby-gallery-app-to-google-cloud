@@ -4,6 +4,7 @@ import { auth } from "@/auth"
 
 export async function middleware(request: NextRequest) {
     // 既存の認証ミドルウェアを実行
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const authResponse = await auth(request as any)
 
     // レスポンスを作成（Next.js の auth は内部的にリダイレクト等を返す場合があるため、それに従う）

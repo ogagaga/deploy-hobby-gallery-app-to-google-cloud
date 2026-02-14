@@ -27,6 +27,7 @@ export function useImageColors(imageUrl: string | null) {
             if (!isMounted) return
 
             // node-vibrant v3.x のインポート形式に対応
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const Vibrant = (VibrantModule as any).Vibrant || (VibrantModule as any).default || VibrantModule
 
             if (typeof Vibrant === 'undefined' || !Vibrant.from) {
@@ -37,12 +38,14 @@ export function useImageColors(imageUrl: string | null) {
 
             Vibrant.from(imageUrl)
                 .getPalette()
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 .then((palette: any) => {
                     if (!isMounted) return
 
                     console.log("[useImageColors] Extracted palette:", palette)
 
                     // Swatch オブジェクトから HEX を取得する非常に堅牢な関数
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const getHex = (swatch: any) => {
                         if (!swatch) return undefined
 
@@ -80,6 +83,7 @@ export function useImageColors(imageUrl: string | null) {
                     setColors(extractedColors)
                     setIsLoading(false)
                 })
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 .catch((err: any) => {
                     console.error("[useImageColors] Error extracting colors:", err)
                     if (isMounted) setIsLoading(false)

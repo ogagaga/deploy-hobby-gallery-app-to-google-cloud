@@ -69,7 +69,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                             </div>
                             {project.description && (
                                 <p className="text-xl text-muted-foreground font-medium leading-relaxed max-w-2xl italic">
-                                    "{project.description}"
+                                    &quot;{project.description}&quot;
                                 </p>
                             )}
                         </div>
@@ -77,6 +77,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 </MotionItem>
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                     {project.works.map((work: any) => (
                         <MotionItem key={work.id}>
                             <WorkCard work={work} />

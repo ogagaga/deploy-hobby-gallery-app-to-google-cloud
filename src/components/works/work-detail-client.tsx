@@ -3,7 +3,6 @@
 import { OptimizedImage } from "@/components/ui/optimized-image"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ChevronLeft, Package, Ruler, Palette, Edit3, Heart, Calendar } from "lucide-react"
 import Link from "next/link"
 import { Image as PrismaImage, Tag, Work } from "@prisma/client"
 import { DeleteButton } from "@/components/works/delete-button"
@@ -12,6 +11,7 @@ import { useState, useMemo } from "react"
 import { Lightbox } from "@/components/ui/lightbox"
 import { MarkdownRenderer } from "@/components/ui/markdown-renderer"
 import { useImageColors } from "@/hooks/use-image-colors"
+import { ChevronLeft, Edit3, Package, Ruler, Calendar, Palette } from "lucide-react"
 
 interface WorkDetailClientProps {
     work: Work & {

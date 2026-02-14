@@ -154,6 +154,7 @@ export async function updateWork(id: string, formData: FormData) {
         const tagNames = (data.tags || "").split(",").map(t => t.trim()).filter(Boolean)
         const imageOrder = data.imageOrder ? JSON.parse(data.imageOrder) : []
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await prisma.$transaction(async (tx: any) => {
             // 作品情報の更新
             await tx.work.update({

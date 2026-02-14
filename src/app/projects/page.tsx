@@ -35,6 +35,7 @@ export default async function ProjectsPage() {
 
                 {projects.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                         {projects.map((project: any) => (
                             <MotionItem key={project.id}>
                                 <Link href={`/projects/${project.id}`}>

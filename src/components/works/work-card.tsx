@@ -3,8 +3,8 @@
 import { OptimizedImage } from "@/components/ui/optimized-image"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Card, CardHeader, CardContent } from "@/components/ui/card"
 
 interface WorkCardProps {
     work: {

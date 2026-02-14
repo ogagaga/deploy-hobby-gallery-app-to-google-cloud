@@ -23,8 +23,11 @@ interface InfiniteWorkListProps {
 export function InfiniteWorkList({
     initialWorks,
     initialHasMore,
-    initialTotal
+    // initialTotal is unused but kept in interface for now, removed from destructuring to silence lint warning
 }: InfiniteWorkListProps) {
+    // using initialTotal in useState if needed, or just ignore it.
+    // The previous code had initialTotal in destructuring but not used.
+    // Let's check if it's used in the function body. It wasn't.
     const [works, setWorks] = useState(initialWorks)
     const [page, setPage] = useState(1)
     const [hasMore, setHasMore] = useState(initialHasMore)
@@ -40,23 +43,25 @@ export function InfiniteWorkList({
 
     // スクロール検知による追加読み込み
     useEffect(() => {
+        async function loadMore() {
+            if (isLoading || !hasMore || !inView || searchQuery || selectedGenre) return
+
+            setIsLoading(true)
+            const nextPage = page + 1
+            const result = await getWorks(nextPage, 8)
+
+            if (result.success) {
+                setWorks(prev => [...prev, ...result.works])
+                setPage(nextPage)
+                setHasMore(result.hasMore)
+            }
+            setIsLoading(false)
+        }
+
         if (inView && hasMore && !isLoading && !searchQuery && !selectedGenre) {
             loadMore()
         }
-    }, [inView, hasMore, isLoading, searchQuery, selectedGenre])
-
-    async function loadMore() {
-        setIsLoading(true)
-        const nextPage = page + 1
-        const result = await getWorks(nextPage, 8)
-
-        if (result.success) {
-            setWorks(prev => [...prev, ...result.works])
-            setPage(nextPage)
-            setHasMore(result.hasMore)
-        }
-        setIsLoading(false)
-    }
+    }, [inView, hasMore, isLoading, searchQuery, selectedGenre, page]) // removed getWorks, added page
 
     const genres = useMemo(() => {
         const allGenres = works.map(w => w.genre).filter(Boolean) as string[]

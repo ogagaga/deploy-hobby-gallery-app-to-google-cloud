@@ -119,7 +119,7 @@ describe('Work Actions', () => {
                 { id: '1', name: 'TagA' },
                 { id: '2', name: 'TagB' }
             ]
-            // @ts-ignore - getTags may not exist yet in the imported module
+            // mocking prisma return value - getTags may not exist yet in the imported module
             const { getTags } = await import('./work')
             prismaMock.tag.findMany.mockResolvedValue(mockTags)
 

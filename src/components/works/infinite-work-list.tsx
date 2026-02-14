@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
-import { Work, Tag } from "@prisma/client"
+import { Work, Tag } from "@/generated/prisma/client"
 import { WorkCard } from "./work-card"
 import { Input } from "@/components/ui/input"
 import { Search, Loader2 } from "lucide-react"

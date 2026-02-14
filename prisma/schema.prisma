@@ -1,13 +1,13 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Prisma スキーマ定義
+// Prisma 7: provider を "prisma-client" に変更、output を node_modules 外に指定
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model Work {

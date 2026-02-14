@@ -1,35 +1,34 @@
-# Stage 1: Install dependencies
+# Stage 1: 依存関係のインストール
 FROM node:20-slim AS deps
-RUN apt-get update && apt-get install -y openssl ca-certificates
+RUN apt-get update && apt-get install -y ca-certificates
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# Stage 2: Build the application
+# Stage 2: アプリケーションのビルド
 FROM node:20-slim AS builder
-RUN apt-get update && apt-get install -y openssl ca-certificates
+RUN apt-get update && apt-get install -y ca-certificates
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Prisma のクライアント生成
-# Prisma のクライアント生成
-RUN npx prisma@6.19.2 generate
+# Prisma Client の生成 (v7)
+RUN npx prisma generate
 
 # Next.js のビルド (本番用)
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
 
-# Stage 3: Production runner
+# Stage 3: 本番ランナー
 FROM node:20-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# Install openssl for Prisma runtime
-RUN apt-get update && apt-get install -y openssl ca-certificates && \
+# ca-certificates のみ必要（Prisma 7 は Rust エンジン不要）
+RUN apt-get update && apt-get install -y ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
 RUN groupadd --system --gid 1001 nodejs
@@ -39,10 +38,14 @@ RUN useradd --system --uid 1001 -m nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-# 全ての依存関係（prisma CLI等を含む）をコピー
+# 全ての依存関係をコピー
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+# 生成された Prisma Client をコピー
+COPY --from=builder --chown=nextjs:nodejs /app/src/generated ./src/generated
 # Prisma 関連（スキーマ、マイグレーション）をコピー
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+# Prisma Config をコピー (Prisma 7 必須)
+COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.ts
 
 # 権限の調整
 RUN chown -R nextjs:nodejs /app

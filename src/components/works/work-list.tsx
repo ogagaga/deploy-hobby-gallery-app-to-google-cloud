@@ -1,12 +1,12 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { Work, Tag } from "@prisma/client"
+import { Work, Tag } from "@/generated/prisma/client"
 import { WorkCard } from "./work-card"
 import { Input } from "@/components/ui/input"
-import { Search, SlidersHorizontal } from "lucide-react"
 import { MotionContainer, MotionItem } from "@/components/animations/motion-wrapper"
 import { Badge } from "@/components/ui/badge"
+import { Search } from "lucide-react"
 
 interface WorkListProps {
     works: (Work & { tags: Tag[] })[]

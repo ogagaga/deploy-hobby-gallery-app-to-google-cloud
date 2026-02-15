@@ -15,6 +15,13 @@ export const prismaMock = {
         updateMany: vi.fn(),
         deleteMany: vi.fn(),
     },
+    project: {
+        create: vi.fn(),
+        findMany: vi.fn(),
+        findUnique: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
+    },
     tag: {
         findMany: vi.fn(),
     },
@@ -61,4 +68,12 @@ vi.mock('fs/promises', () => ({
 
 vi.mock('next/cache', () => ({
     revalidatePath: vi.fn(),
+}))
+
+// sharp モック
+vi.mock('sharp', () => ({
+    default: vi.fn(() => ({
+        rotate: vi.fn().mockReturnThis(),
+        toBuffer: vi.fn().mockResolvedValue(Buffer.from('processed-image')),
+    })),
 }))

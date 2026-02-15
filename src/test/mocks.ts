@@ -11,6 +11,8 @@ export const prismaMock = {
     },
     image: {
         create: vi.fn(),
+        update: vi.fn(),
+        updateMany: vi.fn(),
         deleteMany: vi.fn(),
     },
     tag: {

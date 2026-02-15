@@ -7,7 +7,14 @@ vi.mock('next/cache', () => ({
 }))
 
 // モック定義の後に実体をロード
+// lib/storage のモック
+vi.mock('@/lib/storage', () => ({
+    saveImage: vi.fn().mockResolvedValue('/uploads/mock.jpg'),
+    deleteImage: vi.fn().mockResolvedValue(undefined),
+}))
+
 import { createWork, updateWork, deleteWork } from './work'
+import { saveImage } from '@/lib/storage' // モックをインポート
 import { revalidatePath } from 'next/cache'
 
 describe('Work Actions', () => {
@@ -20,13 +27,15 @@ describe('Work Actions', () => {
         it('throws error if not authenticated', async () => {
             authMock.mockResolvedValue(null)
             const formData = new FormData()
-            await expect(createWork(formData)).rejects.toThrow('Unauthorized')
+            const result = await createWork(formData)
+            expect(result).toEqual({ success: false, error: "サーバーエラーが発生しました。" })
         })
 
         it('throws error if not admin', async () => {
             authMock.mockResolvedValue({ user: { email: 'user@example.com' } })
             const formData = new FormData()
-            await expect(createWork(formData)).rejects.toThrow('Unauthorized')
+            const result = await createWork(formData)
+            expect(result).toEqual({ success: false, error: "サーバーエラーが発生しました。" })
         })
 
         it('creates a work successfully when admin', async () => {
@@ -34,10 +43,18 @@ describe('Work Actions', () => {
 
             const formData = new FormData()
             formData.append('title', 'New Work')
+            formData.append('kitName', 'Kit Name')
+            formData.append('maker', 'Maker')
+            formData.append('scale', '1/144')
+            formData.append('genre', 'Genre')
+            formData.append('paints', 'Paints')
+            formData.append('description', 'Description')
+            formData.append('projectId', '')
+            formData.append('endDate', '')
 
             // arrayBuffer が jsdom/node環境で未定義の場合があるため、モックを注入
-            const mockFile = new File([''], 'main.jpg', { type: 'image/jpeg' })
-            mockFile.arrayBuffer = vi.fn().mockResolvedValue(new ArrayBuffer(0))
+            const mockFile = new File(['dummy'], 'main.jpg', { type: 'image/jpeg' })
+            mockFile.arrayBuffer = vi.fn().mockResolvedValue(new ArrayBuffer(5))
 
             formData.append('mainImage', mockFile)
             formData.append('tags', 'tag1, tag2')
@@ -84,6 +101,17 @@ describe('Work Actions', () => {
             const formData = new FormData()
             formData.append('title', 'Updated Title')
             formData.append('tags', 'tag1')
+            formData.append('kitName', 'Kit Name')
+            formData.append('maker', 'Maker')
+            formData.append('scale', '1/144')
+            formData.append('genre', 'Genre')
+            formData.append('paints', 'Paints')
+            formData.append('description', 'Description')
+            formData.append('projectId', '')
+            formData.append('projectId', '')
+            formData.append('endDate', '')
+            formData.append('endDate', '')
+            formData.append('imageOrder', '[]')
 
             // 新規サブ写真の追加 (2枚)
             const newSubFile1 = new File(['hello'], 'new-sub1.jpg', { type: 'image/jpeg' })
@@ -94,10 +122,14 @@ describe('Work Actions', () => {
             formData.append('subImages', newSubFile1)
             formData.append('subImages', newSubFile2)
 
+            // image.create のモック戻り値設定
+            prismaMock.image.create.mockResolvedValue({ url: 'new-image-url', id: 'new-id', workId: '1', order: 999 })
+
             // 削除対象の指定 (URLで指定する想定)
             formData.append('deleteImageUrls', '/uploads/sub1.jpg')
 
-            await updateWork('1', formData)
+            const result = await updateWork('1', formData)
+            if (!result.success) console.log("updateWork failed:", result)
 
             // prisma.work.update が呼ばれ、適切なトランザクションが実行されることを期待
             expect(prismaMock.work.update).toHaveBeenCalled()

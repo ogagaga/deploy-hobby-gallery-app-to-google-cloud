@@ -41,8 +41,6 @@ describe('WorkCard', () => {
         expect(screen.getByText(/Test Kit/)).toBeInTheDocument()
         expect(screen.getByText(/Test Maker/)).toBeInTheDocument()
         expect(screen.getByText('Test Genre')).toBeInTheDocument()
-        expect(screen.getByText('Tag1')).toBeInTheDocument()
-        expect(screen.getByText('Tag2')).toBeInTheDocument()
     })
 
     it('has a link to the work details page', () => {

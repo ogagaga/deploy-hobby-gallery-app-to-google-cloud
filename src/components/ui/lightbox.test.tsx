@@ -4,18 +4,33 @@ import { Lightbox } from './lightbox'
 import { describe, it, expect, vi } from 'vitest'
 
 // framer-motion のモック (Proxyを使用してあらゆる要素に対応)
-vi.mock('framer-motion', () => ({
-    motion: new Proxy({}, {
+vi.mock('framer-motion', () => {
+    const componentCache = new Map();
+    const motion = new Proxy(() => { }, {
         get: (_target, property) => {
-            return ({ children, ...props }: any) => {
-                const Tag = property as any;
-                // layoutId などのプロパティを DOM に流さないようにフィルタリング
-                const { layoutId, whileHover, whileTap, initial, animate, exit, transition, drag, dragConstraints, dragElastic, onDragEnd, ...domProps } = props;
-                return <Tag {...domProps}>{children}</Tag>;
-            };
+            if (!componentCache.has(property)) {
+                componentCache.set(property, ({ children, ...props }: any) => {
+                    const Tag = property as any;
+                    // layoutId などのプロパティを DOM に流さないようにフィルタリング
+                    const { layoutId, whileHover, whileTap, initial, animate, exit, transition, drag, dragConstraints, dragElastic, onDragEnd, ...domProps } = props;
+                    return <Tag {...domProps}>{children}</Tag>;
+                });
+            }
+            return componentCache.get(property);
+        },
+        apply: (_target, _thisArg, argumentsList) => {
+            return argumentsList[0];
         }
-    }),
-    AnimatePresence: ({ children }: any) => <>{children}</>,
+    });
+
+    return {
+        motion,
+        AnimatePresence: ({ children }: any) => <>{children}</>,
+    }
+})
+
+vi.mock('next/image', () => ({
+    default: ({ src, alt }: any) => <img src={src} alt={alt} />
 }))
 
 const mockImages = ['/img1.jpg', '/img2.jpg', '/img3.jpg']

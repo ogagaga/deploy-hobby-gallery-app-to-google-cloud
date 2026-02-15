@@ -139,7 +139,6 @@ export async function updateWork(id: string, formData: FormData) {
             where: { id },
             include: { images: true }
         })
-
         if (!existingWork) return { success: false, error: "作品が見つかりません。" }
 
         let mainImageUrl = existingWork.mainImage

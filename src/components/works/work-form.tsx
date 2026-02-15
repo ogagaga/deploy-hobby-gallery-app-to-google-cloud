@@ -236,7 +236,7 @@ export function WorkForm({ initialData, projects = [] }: WorkFormProps) {
                     <div className="space-y-4">
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
-                                <Label className="text-lg font-bold">サブ写真</Label>
+                                <Label htmlFor="subImages" className="text-lg font-bold">サブ写真</Label>
                                 <Button
                                     type="button"
                                     variant="outline"
@@ -292,6 +292,7 @@ export function WorkForm({ initialData, projects = [] }: WorkFormProps) {
                                             type="button"
                                             variant="ghost"
                                             size="icon-sm"
+                                            aria-label="削除"
                                             className="text-destructive hover:bg-destructive/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                                             onClick={(e) => {
                                                 e.stopPropagation();

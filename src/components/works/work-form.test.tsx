@@ -21,7 +21,24 @@ vi.mock('sonner', () => ({
     toast: {
         success: vi.fn(),
         error: vi.fn(),
+        loading: vi.fn(),
+        dismiss: vi.fn(),
     },
+}))
+
+vi.mock('framer-motion', async (importOriginal) => {
+    const actual = await importOriginal<typeof import('framer-motion')>()
+    return {
+        ...actual,
+        Reorder: {
+            Group: ({ children, className }: { children: React.ReactNode, className?: string }) => <div className={className}>{children}</div>,
+            Item: ({ children, className }: { children: React.ReactNode, className?: string }) => <div className={className}>{children}</div>,
+        },
+    }
+})
+
+vi.mock('@/lib/image-compression', () => ({
+    compressImage: vi.fn((file) => Promise.resolve(file)),
 }))
 
 describe('WorkForm - Multiple Sub-images', () => {
@@ -111,7 +128,7 @@ describe('WorkForm - Multiple Sub-images', () => {
 
         // 既存のサブ写真が表示されているか
         await waitFor(() => {
-            const existingImages = screen.getAllByAltText('Sub image')
+            const existingImages = screen.getAllByAltText('Sub preview')
             expect(existingImages).toHaveLength(2)
         })
 
